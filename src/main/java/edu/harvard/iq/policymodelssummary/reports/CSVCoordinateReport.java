@@ -75,8 +75,6 @@ public class CSVCoordinateReport {
             }
         });
         
-        
-        
     }
     
     private void createColumns( TranscriptSummary smry ) {
@@ -89,6 +87,10 @@ public class CSVCoordinateReport {
             .forEach( tspt -> {
                 columns.add( new CoordinateColumn.TextValue(tspt, tspt.getName() + " Text") );
                 columns.add( new CoordinateColumn.OrdinalValue(tspt, tspt.getName() + " Ordinal") );
+                columns.add( new CoordinateColumn.ScaledValue(tspt, tspt.getName() + " Scaled") );
             });
+        
+        columns.add( new CoordinateSummaryColumn.Min(smry, "Min"));
+        columns.add( new CoordinateSummaryColumn.Max(smry, "Max"));
     }
 }

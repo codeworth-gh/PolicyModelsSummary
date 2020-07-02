@@ -33,7 +33,7 @@ public class Transcript {
         }
 
         public Optional<String> getNote() {
-            return note;
+            return  (note!=null) ? note : Optional.empty();
         }
 
         public String getAnswerText() {

@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.joining;
  */
 public abstract class CoordinateColumn extends ReportColumn {
     
-    private static final AbstractValue.Visitor<String> VALUE_PTR = new AbstractValue.Visitor<>(){
+    static final AbstractValue.Visitor<String> VALUE_PTR = new AbstractValue.Visitor<>(){
         @Override
         public String visitToDoValue(ToDoValue v) {
             return "TODO";
@@ -40,7 +40,7 @@ public abstract class CoordinateColumn extends ReportColumn {
         }
     };
     
-    private static final AbstractValue.Visitor<String> ORDINAL_PTR = new AbstractValue.Visitor<>(){
+    static final AbstractValue.Visitor<String> ORDINAL_PTR = new AbstractValue.Visitor<>(){
         @Override
         public String visitToDoValue(ToDoValue v) {
             return "TODO";
@@ -61,6 +61,29 @@ public abstract class CoordinateColumn extends ReportColumn {
             System.err.println("Attempt to print a compound value of slot " + v.getSlot().getName() );
         }
     };
+    
+    static final AbstractValue.Visitor<Double> SCALED_PTR = new AbstractValue.Visitor<>(){
+        @Override
+        public Double visitToDoValue(ToDoValue v) {
+            return -1d;
+        }
+
+        @Override
+        public Double visitAtomicValue(AtomicValue v) {
+            return ((double)v.getOrdinal()/v.getSlot().values().size());
+        }
+
+        @Override
+        public Double visitAggregateValue(AggregateValue v) {
+            return ((double)v.getValues().size()/v.getSlot().getItemType().values().size());
+        }
+
+        @Override
+        public Double visitCompoundValue(CompoundValue v) {
+            System.err.println("Attempt to print a compound value of slot " + v.getSlot().getName() );
+            return -2d;
+        }
+    };
 
 
     final Transcript tspt;
@@ -72,14 +95,14 @@ public abstract class CoordinateColumn extends ReportColumn {
     }
     
     
-    protected AbstractValue getValue( CompoundValue root, List<String> path ) {
+    public static AbstractValue getSlotValue( CompoundValue root, List<String> path ) {
         AbstractSlot nextSlot = root.getSlot().getSubSlot(path.get(0));
         if ( nextSlot == null ) return null;
         if ( path.size() == 1 ) {
             return root.get( nextSlot );
             
         } else {
-            return getValue((CompoundValue) root.get(nextSlot), path.subList(1, path.size()));
+            return getSlotValue((CompoundValue) root.get(nextSlot), path.subList(1, path.size()));
         }
     }
     
@@ -93,7 +116,7 @@ public abstract class CoordinateColumn extends ReportColumn {
         String getValue(String rowKey) {
             List<String> path = Arrays.asList(rowKey.split("/"));
 
-            AbstractValue abv = getValue(tspt.getCoordinate(), path.subList(1, path.size()));
+            AbstractValue abv = getSlotValue(tspt.getCoordinate(), path.subList(1, path.size()));
             return (abv!=null) ? abv.accept(VALUE_PTR) : "";
 
         }
@@ -109,9 +132,25 @@ public abstract class CoordinateColumn extends ReportColumn {
         String getValue(String rowKey) {
             List<String> path = Arrays.asList(rowKey.split("/"));
 
-            AbstractValue abv = getValue(tspt.getCoordinate(), path.subList(1, path.size()));
+            AbstractValue abv = getSlotValue(tspt.getCoordinate(), path.subList(1, path.size()));
             return (abv!=null) ? abv.accept(ORDINAL_PTR) : "";
 
         }
     }
+    
+    public static class ScaledValue extends CoordinateColumn {
+        
+        public ScaledValue(Transcript tspt, String rowName) {
+            super(tspt, rowName);
+        }
+        
+        @Override
+        String getValue(String rowKey) {
+            List<String> path = Arrays.asList(rowKey.split("/"));
+
+            AbstractValue abv = getSlotValue(tspt.getCoordinate(), path.subList(1, path.size()));
+            return (abv!=null) ? String.format("%.4f", abv.accept(SCALED_PTR)*9+1) : "0";
+        }
+    }
+    
 }

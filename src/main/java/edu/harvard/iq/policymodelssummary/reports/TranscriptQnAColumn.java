@@ -48,7 +48,7 @@ public abstract class TranscriptQnAColumn extends ReportColumn {
         @Override
         String getValue(String rowKey) {
             Transcript.SingleQandA qna = trpt.get(rowKey);
-            return ( qna != null ) ? String.format("%.4f", qna.getNormalizedAnswer()) : null;
+            return ( qna != null ) ? String.format("%.4f", qna.getNormalizedAnswer()*9+1) : "0";
         }
     }
 }
