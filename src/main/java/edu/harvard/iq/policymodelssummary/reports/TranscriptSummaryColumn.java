@@ -4,20 +4,21 @@ import edu.harvard.iq.policymodelssummary.TranscriptSummary;
 import java.util.OptionalInt;
 
 /**
- *
+ * A column summarizing a row in multiple transcripts.
+ * 
  * @author michael
  */
 public abstract class TranscriptSummaryColumn extends ReportColumn {
     
-    protected final TranscriptSummary smry;
+    protected final TranscriptSummary summary;
 
     public TranscriptSummaryColumn(TranscriptSummary smry, String rowName) {
         super(rowName);
-        this.smry = smry;
+        this.summary = smry;
     }
     
     protected long countValues( String row ) {
-        return smry.getTranscripts().stream()
+        return summary.getTranscripts().stream()
             .map( t -> t.get(row) )
             .filter( v -> v != null )
             .mapToInt( r -> r.getAnswerOrdinal() )
@@ -45,7 +46,7 @@ public abstract class TranscriptSummaryColumn extends ReportColumn {
 
         @Override
         String getValue(String rowKey) {
-            OptionalInt mmax = smry.getTranscripts().stream()
+            OptionalInt mmax = summary.getTranscripts().stream()
             .map( t -> t.get(rowKey) )
             .filter( v -> v != null )
             .mapToInt( v -> v.getAnswerOrdinal() )
@@ -64,7 +65,7 @@ public abstract class TranscriptSummaryColumn extends ReportColumn {
 
         @Override
         String getValue(String rowKey) {
-            OptionalInt mmin = smry.getTranscripts().stream()
+            OptionalInt mmin = summary.getTranscripts().stream()
             .map( t -> t.get(rowKey) )
             .filter( v -> v != null )
             .mapToInt( v -> v.getAnswerOrdinal() )
@@ -87,7 +88,7 @@ public abstract class TranscriptSummaryColumn extends ReportColumn {
             
             long count = countValues(rowKey);
             
-            double sum = smry.getTranscripts().stream()
+            double sum = summary.getTranscripts().stream()
                 .map( t -> t.get(rowKey) )
                 .filter( v -> v != null )
                 .mapToDouble(q -> q.getNormalizedAnswer() )
@@ -108,7 +109,7 @@ public abstract class TranscriptSummaryColumn extends ReportColumn {
             
             long count = countValues(rowKey);
             
-            double sum = smry.getTranscripts().stream()
+            double sum = summary.getTranscripts().stream()
                 .map( t -> t.get(rowKey) )
                 .filter( v -> v != null )
                 .mapToDouble(q -> q.getAnswerOrdinal())

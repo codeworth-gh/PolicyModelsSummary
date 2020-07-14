@@ -56,7 +56,11 @@ public class CSVCoordinateReport {
             @Override
             public void visitAggregateSlotImpl(AggregateSlot t) {
                 stack.add(t.getName());
-                addRow();
+                t.getItemType().values().forEach(sv -> {
+                    stack.add(sv.getName());
+                    addRow();
+                    stack.removeLast();
+                });
                 stack.removeLast();
             }
 
@@ -92,5 +96,6 @@ public class CSVCoordinateReport {
         
         columns.add( new CoordinateSummaryColumn.Min(smry, "Min"));
         columns.add( new CoordinateSummaryColumn.Max(smry, "Max"));
+        columns.add( new CoordinateSummaryColumn.Counts(smry, "Counts"));
     }
 }

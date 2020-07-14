@@ -30,7 +30,8 @@ import static java.util.stream.Collectors.toList;
 import java.util.stream.StreamSupport;
 
 /**
- * A summary object of all transcripts.
+ * A summary object holding multiple transcripts.
+ * 
  * @author michael
  */
 public class TranscriptSummary {

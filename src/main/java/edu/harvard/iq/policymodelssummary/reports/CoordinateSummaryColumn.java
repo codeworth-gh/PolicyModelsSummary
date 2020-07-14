@@ -1,14 +1,20 @@
 package edu.harvard.iq.policymodelssummary.reports;
 
-import edu.harvard.iq.policymodels.model.policyspace.slots.AbstractSlot;
 import edu.harvard.iq.policymodels.model.policyspace.slots.AtomicSlot;
-import edu.harvard.iq.policymodels.model.policyspace.values.AbstractValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.AtomicValue;
 import edu.harvard.iq.policymodelssummary.TranscriptSummary;
-import java.util.ArrayList;
+import edu.harvard.iq.policymodelssummary.policyspace.ExpandedSlotValue;
+import edu.harvard.iq.policymodelssummary.policyspace.ExpandedSlotValue.Atomic;
+import edu.harvard.iq.policymodelssummary.policyspace.ExpandedSlotValue.Flag;
 import java.util.Arrays;
 import java.util.List;
-import static java.util.stream.Collectors.toList;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -16,8 +22,18 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class CoordinateSummaryColumn extends TranscriptSummaryColumn {
 
-    public CoordinateSummaryColumn(TranscriptSummary smry, String rowName) {
-        super(smry, rowName);
+    public CoordinateSummaryColumn(TranscriptSummary smry, String title) {
+        super(smry, title);
+    }
+    
+    protected Map<ExpandedSlotValue, Long> counts( String rowKey ) {
+        List<String> path = Arrays.asList(rowKey.split("/"));
+        List<String> slotPath = path.subList(1, path.size());
+        return summary.getTranscripts().stream()
+            .map( t -> t.getCoordinate() )
+            .filter( t -> t != null )
+            .map( t -> ExpandedSlotValue.lookup(t, slotPath) )
+            .collect( groupingBy( Function.identity(), counting()));
     }
     
     public static class Max extends CoordinateSummaryColumn {
@@ -28,25 +44,9 @@ public abstract class CoordinateSummaryColumn extends TranscriptSummaryColumn {
 
         @Override
         String getValue(String rowKey) {
-            List<String> path = Arrays.asList(rowKey.split("/"));
-            List<String> slotPath = path.subList(1, path.size());
-            List<AbstractValue> values = new ArrayList<>(smry.getTranscripts().size());
-            
-            smry.getTranscripts().forEach(tspt -> {
-                values.add(CoordinateColumn.getSlotValue(tspt.getCoordinate(), slotPath));
-            });
-            
-            values = values.stream().filter(v->v != null).collect( toList() );
-            if ( values.isEmpty() ) return "";
-            AbstractSlot slot = values.get(0).getSlot();
-            
-            if ( slot instanceof AtomicSlot ) {
-                return values.stream().map( v -> (AtomicValue)v ).max( (a,b)->a.getOrdinal()-b.getOrdinal() ).get().getName();
-                
-            } else {
-                return "";
-            }
-            
+            Set<ExpandedSlotValue> found = counts(rowKey).keySet();
+            Optional<ExpandedSlotValue> max = found.stream().sorted( (a,b)->b.ordinal()-a.ordinal() ).findFirst();
+            return max.isPresent() ? max.get().nameString() : "";
         }
     }
 
@@ -58,27 +58,47 @@ public abstract class CoordinateSummaryColumn extends TranscriptSummaryColumn {
 
         @Override
         String getValue(String rowKey) {
-            List<String> path = Arrays.asList(rowKey.split("/"));
-            List<String> slotPath = path.subList(1, path.size());
-            List<AbstractValue> values = new ArrayList<>(smry.getTranscripts().size());
+            Set<ExpandedSlotValue> found = counts(rowKey).keySet();
+            Optional<ExpandedSlotValue> min = found.stream().sorted( (a,b)->a.ordinal()-b.ordinal() ).findFirst();
+            return min.isPresent() ? min.get().nameString() : "";
+        }
+    }
+    
+    public static class Counts extends CoordinateSummaryColumn { 
+
+        public Counts(TranscriptSummary smry, String title) {
+            super(smry, title);
+        }
+        
+        @Override
+        String getValue(String rowKey) {
+            Map<ExpandedSlotValue, Long> found = counts(rowKey);
             
-            smry.getTranscripts().forEach(tspt -> {
-                values.add(CoordinateColumn.getSlotValue(tspt.getCoordinate(), slotPath));
-            });
+            if ( found.isEmpty() ) return "";
+            ExpandedSlotValue sampleSlot = found.keySet().iterator().next();
             
-            values = values.stream().filter(v->v != null).collect( toList() );
-            if ( values.isEmpty() ) return "";
-            
-            AbstractSlot slot = values.get(0).getSlot();
-            
-            if ( slot instanceof AtomicSlot ) {
-                return values.stream().map( v -> (AtomicValue)v ).min( (a,b)->a.getOrdinal()-b.getOrdinal() ).get().getName();
+            if ( sampleSlot instanceof ExpandedSlotValue.Flag ) {
+                return "no:" + found.getOrDefault(Flag.NO,0l) + " yes:" + found.getOrDefault(Flag.YES,0l); 
+                    
+            } else if ( sampleSlot instanceof ExpandedSlotValue.Atomic ) {
+                AtomicValue av = (AtomicValue) sampleSlot.get();
+                if ( av == null ) {
+                    System.err.println("Error getting counts: '" + rowKey + "' has null value");
+                    return "";
+                }
+                AtomicSlot slt = av.getSlot();
+                return slt.values().stream()
+                    .map( v -> v.getName() + ":" + found.getOrDefault(new Atomic(v),0l) )
+                    .collect( joining(" ") );
+                    
                 
-            } else {
+            } else { 
                 return "";
             }
             
+            
         }
+        
     }
     
 }

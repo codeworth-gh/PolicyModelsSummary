@@ -7,7 +7,10 @@ import edu.harvard.iq.policymodels.model.policyspace.values.CompoundValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.ToDoValue;
 import edu.harvard.iq.policymodelssummary.Transcript.SingleQandA;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -37,25 +40,27 @@ public class TranscriptPrinter {
         
         prt.println();
         prt.println("Results:");
+        List<String> coordinateString = new ArrayList<>();
+        
         tspt.getCoordinate().accept(new AbstractValue.Visitor<Void>() {
             
             LinkedList<String> stack = new LinkedList<>();
             
             @Override
             public Void visitToDoValue(ToDoValue v) {
-                prt.println( stackToPath() + ": TODO");
+                coordinateString.add(stackToPath() + ": TODO");
                 return null;
             }
 
             @Override
             public Void visitAtomicValue(AtomicValue v) {
-                prt.println( stackToPath() + "/" + v.getSlot().getName() + ": " + v.getName() );
+                coordinateString.add( stackToPath() + "/" + v.getSlot().getName() + ": " + v.getName() );
                 return null;
             }
 
             @Override
             public Void visitAggregateValue(AggregateValue v) {
-                prt.println( stackToPath() + "/" + v.getSlot().getName() + ": " 
+                coordinateString.add( stackToPath() + "/" + v.getSlot().getName() + ": " 
                                 + v.getValues().stream().map( w->w.getName()).sorted().collect(joining(",")));
                 return null;
             }
@@ -73,6 +78,9 @@ public class TranscriptPrinter {
                 return stack.stream().collect(joining("/"));
             }
         });
+        Collections.sort(coordinateString);
+        
+        coordinateString.forEach( prt::println );
         
     }   
     

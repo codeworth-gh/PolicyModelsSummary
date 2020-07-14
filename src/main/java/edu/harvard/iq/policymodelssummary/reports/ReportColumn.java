@@ -5,14 +5,14 @@ package edu.harvard.iq.policymodelssummary.reports;
  * @author michael
  */
 public abstract class ReportColumn {
-     private final String rowName;
+    private final String title;
 
     public ReportColumn(String rowName) {
-        this.rowName = rowName;
+        this.title = rowName;
     }
    
     public String getName() {
-        return rowName;
+        return title;
     }
     
     abstract String getValue(String rowKey);
