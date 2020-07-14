@@ -10,6 +10,7 @@ import edu.harvard.iq.policymodels.model.policyspace.values.AtomicValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.CompoundValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.ToDoValue;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Value in the expended policy model space. This can be an {@link AtomicValue},
@@ -129,7 +130,33 @@ public abstract class ExpandedSlotValue<T> {
         if ( nextSlot instanceof CompoundSlot ) {
             return lookup((CompoundValue) root.get(nextSlot), path.subList(1, path.size()));
         }
-        throw new IllegalArgumentException("Unkown value of unkown type: " + root );
+        throw new IllegalArgumentException("Encountered a value of an unkown type: " + root );
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.value);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ExpandedSlotValue<?> other = (ExpandedSlotValue<?>) obj;
+        return Objects.equals(this.value, other.value);
     }
     
+    @Override
+    public String toString(){
+        return "[ExpandedSlotValue: " + nameString() + "]";
+    }
 }

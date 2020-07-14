@@ -28,11 +28,10 @@ public abstract class CoordinateSummaryColumn extends TranscriptSummaryColumn {
     
     protected Map<ExpandedSlotValue, Long> counts( String rowKey ) {
         List<String> path = Arrays.asList(rowKey.split("/"));
-        List<String> slotPath = path.subList(1, path.size());
         return summary.getTranscripts().stream()
             .map( t -> t.getCoordinate() )
             .filter( t -> t != null )
-            .map( t -> ExpandedSlotValue.lookup(t, slotPath) )
+            .map( t -> ExpandedSlotValue.lookup(t, path) )
             .collect( groupingBy( Function.identity(), counting()));
     }
     
@@ -90,15 +89,9 @@ public abstract class CoordinateSummaryColumn extends TranscriptSummaryColumn {
                 return slt.values().stream()
                     .map( v -> v.getName() + ":" + found.getOrDefault(new Atomic(v),0l) )
                     .collect( joining(" ") );
-                    
-                
             } else { 
                 return "";
             }
-            
-            
         }
-        
     }
-    
 }

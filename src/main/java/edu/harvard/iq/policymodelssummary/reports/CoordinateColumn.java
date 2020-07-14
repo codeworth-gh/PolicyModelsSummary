@@ -41,7 +41,7 @@ public abstract class CoordinateColumn extends ReportColumn {
         
         @Override
         String getValue(String rowKey) {
-            List<String> path = tail(Arrays.asList(rowKey.split("/")));
+            List<String> path = Arrays.asList(rowKey.split("/"));
             return ExpandedSlotValue.lookup(tspt.getCoordinate(), path).nameString();
         }
     }
@@ -54,7 +54,7 @@ public abstract class CoordinateColumn extends ReportColumn {
         
         @Override
         String getValue(String rowKey) {
-            List<String> path = tail(Arrays.asList(rowKey.split("/")));
+            List<String> path = Arrays.asList(rowKey.split("/"));
             return Integer.toString(ExpandedSlotValue.lookup(tspt.getCoordinate(), path).ordinal());
         }
     }
@@ -67,7 +67,7 @@ public abstract class CoordinateColumn extends ReportColumn {
         
         @Override
         String getValue(String rowKey) {
-            List<String> path = tail(Arrays.asList(rowKey.split("/")));
+            List<String> path = Arrays.asList(rowKey.split("/"));
             ExpandedSlotValue<?> value = ExpandedSlotValue.lookup(tspt.getCoordinate(), path);
             
             
@@ -92,8 +92,4 @@ public abstract class CoordinateColumn extends ReportColumn {
         }
     }
     
-    private static List<String> tail( List<String> lst ) {
-        if ( lst.isEmpty() ) return lst;
-        return lst.subList(1, lst.size());
-    }
 }

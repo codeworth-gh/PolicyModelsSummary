@@ -75,7 +75,7 @@ public class CSVCoordinateReport {
             public void visitTodoSlotImpl(ToDoSlot t) {}
             
             void addRow() {
-                rows.add( stack.stream().collect(joining("/")) );
+                rows.add( stack.stream().skip(1).collect(joining("/")) );
             }
         });
         
