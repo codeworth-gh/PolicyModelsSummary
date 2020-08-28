@@ -6,6 +6,7 @@ import edu.harvard.iq.policymodels.model.PolicyModel;
 import edu.harvard.iq.policymodels.model.metadata.PolicyModelData;
 import edu.harvard.iq.policymodels.parser.PolicyModelLoadResult;
 import edu.harvard.iq.policymodels.parser.PolicyModelLoader;
+import edu.harvard.iq.policymodelssummary.JsonReportPrinter;
 import edu.harvard.iq.policymodelssummary.Transcript;
 import edu.harvard.iq.policymodelssummary.TranscriptParser;
 import edu.harvard.iq.policymodelssummary.TranscriptPrinter;
@@ -83,6 +84,14 @@ public class SummarizeTranscripts {
                printer.print(t, prt);
            }   
         }
+        
+        Path jsonSmry = smryDir.resolve("summary.json");
+        System.out.println("Writing JSON summary to: " + jsonSmry.toAbsolutePath());
+        try ( PrintWriter jsonOut = new PrintWriter(Files.newBufferedWriter(jsonSmry))) {
+            JsonReportPrinter jsonPrt = new JsonReportPrinter(jsonOut);
+            jsonPrt.print(mdl, smry.getTranscripts());
+        }
+        
     }
     
     private PolicyModel loadModel( Path mpdelPath ) throws PolicyModelLoadingException {
@@ -94,8 +103,7 @@ public class SummarizeTranscripts {
             return null;
         }
 
-        PolicyModelLoadResult loadRes = PolicyModelLoader.verboseLoader()
-                                                         .load(modelData);
+        PolicyModelLoadResult loadRes = PolicyModelLoader.verboseLoader().load(modelData);
 
         if ( loadRes.isSuccessful() ) {
             System.out.printf("Model '%s' loaded\n", loadRes.getModel().getMetadata().getTitle());

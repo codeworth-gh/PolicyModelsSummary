@@ -67,6 +67,10 @@ public class TranscriptSummary {
     }
     
     /**
+     * Lists the questions, in some reasonable order. Note that since some interviews
+     * won't include all questions, the returned question order may (read: probably) not
+     * be the actual order that appears in an interview.
+     * 
      * @return Ids of the questions, in a reasonable traversal order.
      */
     public List<String> questionOrder() {
@@ -171,12 +175,4 @@ public class TranscriptSummary {
         
         return out;
     }
-    
-    public void dump() {
-        System.out.println( "Transcript:" );
-        System.out.println( "Model: " + model.getMetadata().getTitle() );
-        System.out.println( "Dir: " + transcriptDir );
-        transcripts.forEach( Transcript::dump );
-    }
-    
 }
