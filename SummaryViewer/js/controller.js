@@ -4,11 +4,16 @@ const SIZES = {
         h: 600
     },
     dataPoint: {
-        min: 60,
-        max: 200,
+        min: 20,
+        max: 60,
         default: 30
     }
 };
+const COLORS = {
+    scale: d3.interpolateRgb("#F55", "#8F8"),
+    default: "#DDD"
+};
+
 const VIEW_CRD = {
   x : {},
   y : {},
@@ -75,7 +80,7 @@ function makeCoordinateGetter( crdStr ) {
     }
 }
 
-function makeScreenLocationForce( pomoCrdStr, maxPixel ) {
+function makeScreenLocationForce( pomoCrdStr, maxPixel, reversed ) {
     const pomoGetter = makeCoordinateGetter(pomoCrdStr);
     const pomoValues = dim2coords[pomoCrdStr];
     const bandWidth = maxPixel / pomoValues.length;
@@ -84,7 +89,18 @@ function makeScreenLocationForce( pomoCrdStr, maxPixel ) {
         const pomoCrdVal = pomoGetter(d.data);
         const pomoCrdIdx = Math.max(0,pomoValues.indexOf(pomoCrdVal));
         const screenLocation = bandWidth*pomoCrdIdx + halfBandWidth;
-        return screenLocation;
+        return reversed ? maxPixel-screenLocation : screenLocation;
+    };
+}
+
+function makeDataPointSizeFunction( pomoCrdStr ) {
+    const pomoGetter = makeCoordinateGetter(pomoCrdStr);
+    const pomoValues = dim2coords[pomoCrdStr];
+    const sizeFactor = (SIZES.dataPoint.max - SIZES.dataPoint.min) / pomoValues.length;
+    return function(d){
+        const pomoCrdVal = pomoGetter(d.data);
+        const pomoCrdIdx = Math.max(0,pomoValues.indexOf(pomoCrdVal));
+        return SIZES.dataPoint.min + pomoCrdIdx * sizeFactor;
     };
 }
 
@@ -92,6 +108,14 @@ function menuSelectionChanged( aKey, aMenu ) {
     if ( ! initComplete ) return;
     readMenuStates(aKey, aMenu);
     
+    if ( aKey === "color" ) {
+        dataPointGs.selectAll("circle").transition().duration(500).style("fill",dataPointColor);
+        return; // no need to move any point.
+    }
+
+    if ( aKey === "size" ) {
+        dataPointGs.selectAll("circle").transition().duration(500).attr("r",dataPointSize);
+    }
     if ( simulation ) {
         simulation.stop();
     }
@@ -102,17 +126,17 @@ function readMenuStates(aKey, aMenu) {
 
     // Forces
     VIEW_CRD.x.values = dim2coords[menus.x.value];
-    VIEW_CRD.x.force = makeScreenLocationForce(menus.x.value, SIZES.grid.w);
+    VIEW_CRD.x.force = makeScreenLocationForce(menus.x.value, SIZES.grid.w, false);
     
     VIEW_CRD.y.values = dim2coords[menus.y.value];
-    VIEW_CRD.y.force = makeScreenLocationForce(menus.y.value, SIZES.grid.h);
+    VIEW_CRD.y.force = makeScreenLocationForce(menus.y.value, SIZES.grid.h, true);
     
     // Visual properties
     VIEW_CRD.color.values = (menus.color.value!=="") ? dim2coords[menus.color.value] : [];
     VIEW_CRD.color.getCrd = (menus.color.value!=="") ? makeCoordinateGetter(menus.color.value) : null;
     
     VIEW_CRD.size.values = (menus.size.value!=="") ? dim2coords[menus.size.value] : [];
-    VIEW_CRD.size.getCrd = (menus.size.value!=="") ? makeCoordinateGetter(menus.size.value) : null;
+    VIEW_CRD.size.force = (menus.size.value!=="") ? makeDataPointSizeFunction(menus.size.value) : null;
 
     // axes
     if ( aKey === "x" || aKey==="y" ) {
@@ -122,11 +146,15 @@ function readMenuStates(aKey, aMenu) {
 }
 
 function updateAxis(axisName) {
-    const crdValues = dim2coords[menus[axisName].value];
     const crdText = menus[axisName].options[menus[axisName].selectedIndex].textContent;
     document.getElementById(axisName+"Label").innerText = crdText;
     const crdEmt = document.getElementById(axisName + "Crds");
     Utils.clear(crdEmt);
+    let crdValues = dim2coords[menus[axisName].value];
+    if ( axisName === "y" ) {
+        crdValues = crdValues.slice();
+        crdValues.reverse();
+    }
     crdValues.forEach( v => {
         const emt = document.createElement("li");
         emt.innerText = v.replaceAll(/([A-Z])/g, " $1");
@@ -148,7 +176,6 @@ function loadSpace(slot, stack) {
             m.appendChild(opt);
         });
         dim2coords[optionValue] = slot;
-        
 
     } else {
         // Object - expand the dimensions recursively
@@ -164,7 +191,6 @@ function drawGraph(){
     // updateAxes();
     // addAxes();
     addDataPoints();
-    // updateForces();
 }
 
 function addAxes() {
@@ -180,14 +206,23 @@ function addDataPoints() {
         .attr("class", "repo")
         .attr("transform", d=>"translate(" + d.x + "," + d.y + ")");
 
-    dataPointGs.append("circle").attr("cx", 0).attr("cy", 0).attr("r", dataPointSize);
+    dataPointGs.append("circle").attr("cx", 0).attr("cy", 0).attr("r", dataPointSize).style("fill", COLORS.default );
     dataPointGs.append("text").attr("x", 0).attr("y", 0)
             .attr("text-anchor","middle").attr("dy","0.35em")
             .text( d => id2Title[d.data.id].title );
 }
 
 function dataPointSize(r){
-    return SIZES.dataPoint.default;
+    return (VIEW_CRD.size.force) ? VIEW_CRD.size.force(r) : SIZES.dataPoint.default;
+}
+
+function dataPointColor(r) {
+    if ( VIEW_CRD.color.getCrd ) {
+        const idx = Math.max(0, VIEW_CRD.color.values.indexOf(VIEW_CRD.color.getCrd(r.data)));
+        return COLORS.scale( idx/VIEW_CRD.color.values.length );
+    } else {
+        return COLORS.default;
+    }
 }
 
 function createSimulation() {
@@ -208,6 +243,8 @@ function ticked() {
 function start() {
     SIZES.grid.cx = (SIZES.grid.w/2);
     SIZES.grid.cy = (SIZES.grid.h/2);
+    COLORS.default = COLORS.scale(0.5);
+
     loadData().then( ()=>{
         Object.keys(menus).forEach(k =>{
             menus[k].addEventListener("change", ()=>menuSelectionChanged(k, menus[k]) );
@@ -215,8 +252,8 @@ function start() {
         drawGraph();
     }).then(()=>{
         menus.y.selectedIndex=1;
-        menus.color.selectedIndex=2;
-        menus.size.selectedIndex=3;
+        menus.color.selectedIndex=0;
+        menus.size.selectedIndex=0;
         updateAxis("x");
         updateAxis("y");
         readMenuStates();
