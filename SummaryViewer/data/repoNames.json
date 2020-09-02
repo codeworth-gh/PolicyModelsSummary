@@ -1,0 +1,22 @@
+{
+    "MetabolomicsWorkbench": {
+        "title": "MWB",
+        "id": "MetabolomicsWorkbench"
+    },
+    "AMP2d": {
+        "title": "AMP2d",
+        "id": "AMP2d"
+    },
+    "NIHFigshare": {
+        "title": "NIH Fg",
+        "id": "NIHFigshare"
+    },
+    "MassIVE": {
+        "title": "MVE",
+        "id": "MassIVE"
+    },
+    "CIL": {
+        "title": "CIL",
+        "id": "CIL"
+    }
+}

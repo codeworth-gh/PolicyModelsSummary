@@ -1,0 +1,125 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: "Heebo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #DDD;
+  padding: 1rem;
+}
+
+h1 {
+  font-weight: 700;
+  color: black;
+}
+
+h2 {
+  padding: 0.5em 1rem;
+  font-size: 14pt;
+  margin: 0;
+}
+
+footer {
+  margin-top: auto;
+  background-color: #DDD;
+  padding: 1rem;
+}
+
+.controls {
+  padding: 0.5em 1rem;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  background-color: #eee;
+  font-size: 10pt;
+}
+.controls label {
+  margin: 0 0.5em 0 0;
+  width: 70px;
+}
+.controls div {
+  margin: 0 1em;
+  display: flex;
+  flex-direction: row;
+}
+
+.main {
+  margin: auto;
+  display: grid;
+  grid-template-rows: 600px 2em 2em;
+  grid-template-columns: 2em 120px 600px;
+}
+
+svg#viz {
+  width: 600px;
+  height: 600px;
+  border: 1px solid #DDD;
+}
+
+#viz g.repo circle {
+  fill: #DDDDDD;
+}
+#viz g.repo text {
+  font: 10pt normal sans-serif;
+}
+
+ol.axisCrds {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+}
+ol.axisCrds li {
+  background-color: #EEE;
+  border: 1px solid white;
+  word-wrap: anywhere;
+}
+
+#yCrds {
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
+  grid-auto-flow: row;
+}
+#yCrds li {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  text-align: right;
+}
+
+#yLabel {
+  transform: rotate(-90deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  word-wrap: none;
+  white-space: nowrap;
+}
+
+#xCrds {
+  grid-template-rows: 1fr;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  grid-row: 2/2;
+  grid-column: 3/3;
+}
+#xCrds li {
+  text-align: center;
+}
+
+#xLabel {
+  grid-row: 3/3;
+  grid-column: 3/3;
+  text-align: center;
+}
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>PolicyModels Summary Viewer - dkNet Repository Evaluation</title>
+        <link rel="stylesheet" href="vnd/bsrp/bootstrap.min.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body class="vbox viewport">
+        <header>
+            <h1>dkNet Repository Evaluation</h1>
+            <p> 
+                Fiona Murphy, Michael Bar-Sinai, Maryann E. Martone. 
+                <em> Evaluation of biomedical data repositories for sharing biomedical data against principles governing scholarly infrastructures: open, FAIR, citable and trustworthy
+                </em>
+            </p>
+        </header>
+        <div class="controls">
+            <div><label for="sltX">X</label> <select name="sltX" id="sltX"></select></div>
+            <div><label for="sltY">Y</label> <select name="sltY" id="sltY"></select></div>
+            <div><label for="sltColor">Color</label> <select name="sltColor" id="sltColor"><option value="">-const-</option></select></div>
+            <div><label for="sltSize">Size</label> <select name="sltSize" id="sltSize"><option value="">-const-</option></select></div>
+        </div>
+        <div class="main">
+            <div class="axisLabel" id="yLabel"></div>
+            <ol class="axisCrds"  id="yCrds"></ol>
+            <svg id="viz">
+                <g id="bkg"></g>    
+                <g id="grid"></g>    
+                <g id="dataPoints"></g> 
+            </svg>
+            <ol class="axisCrds"  id="xCrds"></ol>
+            <div class="axisLabel" id="xLabel"></div>
+        </div>
+        <footer>
+            [Data source], [citation info], [other stuff that has to go here (tbd)], [CC-BY?]
+        </footer>
+        <script src="vnd/bsrp/jquery-3.5.1.slim.min.js"></script>
+        <script src="vnd/bsrp/popper.min.js"></script>
+        <script src="vnd/bsrp/bootstrap.min.js"></script>
+        <script src="vnd/d3.min.js"></script>
+        <script src="vnd/Utils.js"></script>
+        <script src="js/controller.js"></script>
+        <script>
+            Utils.ready( function(){
+                start();
+            });
+        </script>
+    </body>
+</html>

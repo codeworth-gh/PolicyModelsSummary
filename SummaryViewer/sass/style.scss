@@ -1,0 +1,142 @@
+
+$edgePadding: 1rem;
+$vizW: 600px;
+$vizH: 600px;
+
+@mixin edgeSection {
+    background-color: #DDD;
+    padding: $edgePadding;
+}
+
+@mixin no-selection {
+    user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    -webkit-user-select:none;
+}
+
+* {
+    box-sizing: border-box;
+}
+  
+html, body {
+    font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+// main layout
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    @include edgeSection;
+}
+
+h1 {
+    font-weight: 700;
+    color: black;
+}
+
+h2 {
+    padding: .5em $edgePadding;
+    font-size: 14pt;
+    margin: 0;
+}
+
+footer { // part of "sticky footer" pattern
+    margin-top: auto;
+    @include edgeSection;
+}
+
+.controls {
+    padding: .5em $edgePadding;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    background-color: #eee;
+    font-size: 10pt;
+
+    label {
+        margin: 0 .5em 0 0;
+        width: 70px;
+    }
+    div {
+        margin: 0 1em;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.main {
+    margin: auto;
+    display: grid;
+    grid-template-rows: $vizH 2em 2em;
+    grid-template-columns: 2em 120px $vizW;
+}
+
+svg#viz {
+    width: $vizW;
+    height: $vizH;
+    border:1px solid #DDD;
+}
+
+#viz g.repo {
+    circle {
+        fill: #DDDDDD;
+    }
+
+    text {
+        font: 10pt normal sans-serif;
+    }
+}
+
+ol.axisCrds {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    
+    li {
+        background-color: #EEE;
+        border: 1px solid white;
+        word-wrap: anywhere;
+    }
+}
+
+#yCrds {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
+    grid-auto-flow: row;
+    li {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        text-align: right;
+    }
+}
+#yLabel {
+    transform: rotate(-90deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    word-wrap: none;
+    white-space: nowrap;
+}
+
+#xCrds {
+    grid-template-rows: 1fr;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    grid-row: 2/2;
+    grid-column: 3/3;
+    li {
+        text-align: center;
+    }
+}
+#xLabel{ 
+    grid-row: 3/3;
+    grid-column: 3/3;
+    text-align: center;
+}
