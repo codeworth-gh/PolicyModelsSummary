@@ -27,16 +27,23 @@ const dataPoints ={};
 const nodes = [];
 let id2Title;
 let simulation;
+let longestCrd;
 
 // Simulation data
 let dataPointArr; 
 
 // SVG <g> elements for each data point
 let dataPointGs;
+const axesLines = {
+    h:[],
+    v:[]
+};
 
 const dim2coords = {};
 const vizEmts = {
-    dataPoints: d3.select("#dataPoints")
+    dataPoints: d3.select("#dataPoints"),
+    gridH: d3.select("#grid-h"),
+    gridV: d3.select("#grid-v")
 };
 let initComplete = false;
 
@@ -56,6 +63,7 @@ function loadData() {
     ).then(function(data){
         space = data.space;
         loadSpace(space, []);
+        longestCrd = Object.values(dim2coords).map(a=>a.length).reduce( (x,y)=>x>y?x:y );
         const tsptIds = Object.keys(data.transcripts);
         tsptIds.forEach( id => {
             dataPoints[id] = data.transcripts[id];
@@ -120,6 +128,12 @@ function menuSelectionChanged( aKey, aMenu ) {
         simulation.stop();
     }
     createSimulation();
+    console.log(aKey);
+    if ( aKey === "y" ) {
+        updateHTicks();
+    } else if ( aKey ==="x" ) {
+        updateVTicks();
+    }
 }
 
 function readMenuStates(aKey, aMenu) {
@@ -188,14 +202,49 @@ function loadSpace(slot, stack) {
 }
 
 function drawGraph(){
-    // updateAxes();
-    // addAxes();
     addDataPoints();
 }
 
-function addAxes() {
+function updateHTicks() {
+    const bandWidth = SIZES.grid.h/VIEW_CRD.y.values.length;
+    const scaler = d => bandWidth*(d+1);
+    const lines = vizEmts.gridH.selectAll("line")
+        .data( d3.range(0,VIEW_CRD.y.values.length-1) );
+    lines.enter()
+        .append("line")
+        .attr("x1",0)
+        .attr("x2",SIZES.grid.w)
+        .attr("y1", scaler )
+        .attr("y2", scaler )
+        .style("opacity",0)
+        .transition().duration(500).style("opacity",1);
+    
+    lines.transition().duration(500).attr("y1", scaler )
+            .attr("y2", scaler );
 
+    lines.exit().transition().duration(500).style("opacity",0).transition().remove();
 }
+
+function updateVTicks() {
+    const bandWidth = SIZES.grid.w/VIEW_CRD.x.values.length;
+    const scaler = d => bandWidth*(d+1);
+    const lines = vizEmts.gridV.selectAll("line")
+        .data( d3.range(0,VIEW_CRD.x.values.length-1) );
+    lines.enter()
+        .append("line")
+        .attr("x1", scaler )
+        .attr("x2", scaler )
+        .attr("y1",0)
+        .attr("y2",SIZES.grid.h)
+        .style("opacity",0)
+        .transition().duration(500).style("opacity",1);
+    
+    lines.transition().duration(500).attr("x1", scaler )
+            .attr("x2", scaler );
+
+    lines.exit().transition().duration(500).style("opacity",0).transition().remove();
+}
+
 
 function addDataPoints() {
     dataPointGs = vizEmts.dataPoints.selectAll("g")
@@ -257,6 +306,8 @@ function start() {
         updateAxis("x");
         updateAxis("y");
         readMenuStates();
+        updateHTicks();
+        updateVTicks();
         initComplete = true;
         createSimulation();
     });

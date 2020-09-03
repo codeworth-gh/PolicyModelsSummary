@@ -89,6 +89,13 @@ svg#viz {
 
     text {
         font: 10pt normal sans-serif;
+        pointer-events: none;
+    }
+}
+
+#viz .grid {
+    line {
+        stroke:#AAA;
     }
 }
 
