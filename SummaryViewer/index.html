@@ -14,23 +14,28 @@
                 </em>
             </p>
         </header>
-        <div class="controls">
-            <div><label for="sltX">X</label> <select name="sltX" id="sltX" autocomplete="off"></select></div>
-            <div><label for="sltColor">Color</label> <select name="sltColor" id="sltColor" autocomplete="off"><option value="">-const-</option></select></div>
-            <div><label for="sltY">Y</label> <select name="sltY" id="sltY" autocomplete="off"></select></div>
-            <div><label for="sltSize">Size</label> <select name="sltSize" id="sltSize" autocomplete="off"><option value="">-const-</option></select></div>
-        </div>
         <div class="main">
-            <div class="axisLabel" id="yLabel"></div>
-            <ol class="axisCrds"  id="yCrds"></ol>
-            <svg id="viz">
-                <g id="bkg"></g>    
-                <g id="grid-h" class="grid"></g>
-                <g id="grid-v" class="grid"></g>
-                <g id="dataPoints"></g> 
-            </svg>
-            <ol class="axisCrds"  id="xCrds"></ol>
-            <div class="axisLabel" id="xLabel"></div>
+            <div class="controls">
+                <div><label for="sltX">X</label> <select name="sltX" id="sltX" autocomplete="off"></select></div>
+                <div><label for="sltY">Y</label> <select name="sltY" id="sltY" autocomplete="off"></select></div>
+                <div><label for="sltColor">Color</label> <select name="sltColor" id="sltColor" autocomplete="off"><option value="">-const-</option></select></div>
+                <div><label for="sltSize">Size</label> <select name="sltSize" id="sltSize" autocomplete="off"><option value="">-const-</option></select></div>
+                <hr>
+                <div class="collapse" id="colorScale"><ul class="scale"></ul></div>
+                <div class="collapse" id="sizeScale"><ul class="scale"></ul></div>
+            </div>
+            <div class="vizCtnr">
+                <div class="axisLabel" id="yLabel"></div>
+                <ol class="axisCrds"  id="yCrds"></ol>
+                <svg id="viz">
+                    <g id="bkg"></g>    
+                    <g id="grid-h" class="grid"></g>
+                    <g id="grid-v" class="grid"></g>
+                    <g id="dataPoints"></g> 
+                </svg>
+                <ol class="axisCrds"  id="xCrds"></ol>
+                <div class="axisLabel" id="xLabel"></div>
+            </div>
         </div>
         <footer>
             [Data source], [citation info], [other stuff that has to go here (tbd)], [CC-BY?]

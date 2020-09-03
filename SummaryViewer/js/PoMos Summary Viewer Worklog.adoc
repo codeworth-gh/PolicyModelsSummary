@@ -1,0 +1,7 @@
+# Summary Viewer Worklog
+
+## Next Steps
+* color legend
+* Size legend
+    * Move to SVG
+* Upload & mail

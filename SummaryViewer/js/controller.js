@@ -56,6 +56,10 @@ const menus = {
 
 const BY_ID = d=>d.id;
 
+function cc2title( text ) {
+    return text.replaceAll(/([A-Z])/g, " $1");
+}
+
 function loadData() {
     return d3.json("data/repoNames.json").then( id2t => {
         id2Title = id2t;
@@ -88,6 +92,21 @@ function makeCoordinateGetter( crdStr ) {
     }
 }
 
+function mockValue( crdStr, value ) {
+    const retVal = {};
+    let cur = retVal;
+    const arr = crdStr.split("/").reverse();
+    
+    while ( arr.length > 0 ){
+        const crd = arr.pop();
+        cur[crd] = (arr.length>0) ? {} : value;
+        cur = cur[crd];
+    }
+
+    return retVal;
+    
+}
+
 function makeScreenLocationForce( pomoCrdStr, maxPixel, reversed ) {
     const pomoGetter = makeCoordinateGetter(pomoCrdStr);
     const pomoValues = dim2coords[pomoCrdStr];
@@ -118,17 +137,28 @@ function menuSelectionChanged( aKey, aMenu ) {
     
     if ( aKey === "color" ) {
         dataPointGs.selectAll("circle").transition().duration(500).style("fill",dataPointColor);
+        if ( aMenu.value==="" ) {
+            $("#colorScale").collapse("hide");
+        } else {
+            updateColorScale();
+            $("#colorScale").collapse("show");
+        }
         return; // no need to move any point.
     }
 
     if ( aKey === "size" ) {
         dataPointGs.selectAll("circle").transition().duration(500).attr("r",dataPointSize);
+        if ( aMenu.value==="" ) {
+            $("#sizeScale").collapse("hide");
+        } else {
+            updateSizeScale();
+            $("#sizeScale").collapse("show");
+        }
     }
     if ( simulation ) {
         simulation.stop();
     }
     createSimulation();
-    console.log(aKey);
     if ( aKey === "y" ) {
         updateHTicks();
     } else if ( aKey ==="x" ) {
@@ -147,6 +177,7 @@ function readMenuStates(aKey, aMenu) {
     
     // Visual properties
     VIEW_CRD.color.values = (menus.color.value!=="") ? dim2coords[menus.color.value] : [];
+    VIEW_CRD.color.crdStr = (menus.color.value!=="") ? menus.color.value : null;
     VIEW_CRD.color.getCrd = (menus.color.value!=="") ? makeCoordinateGetter(menus.color.value) : null;
     
     VIEW_CRD.size.values = (menus.size.value!=="") ? dim2coords[menus.size.value] : [];
@@ -176,6 +207,55 @@ function updateAxis(axisName) {
     })
 }
 
+function updateColorScale() {
+    const colScEmt = document.getElementById("colorScale").getElementsByTagName("ul")[0];
+    const crdText = menus.size.options[menus.color.selectedIndex].textContent;
+    
+    Utils.clear(colScEmt);
+    let li = document.createElement("li");
+    li.classList.add("title")
+    li.textContent=cc2title(crdText);
+    colScEmt.appendChild(li);
+
+    VIEW_CRD.color.values.forEach( v => {
+        li = document.createElement("li");
+        li.textContent = cc2title(v);
+        li.style.backgroundColor = dataPointColor({data:mockValue(VIEW_CRD.color.crdStr, v)});
+        colScEmt.appendChild(li);
+    })
+}
+
+function updateSizeScale() {
+    const szScEmt = document.getElementById("sizeScale").getElementsByTagName("ul")[0];
+    const crdText = menus.size.options[menus.size.selectedIndex].textContent;
+    
+    Utils.clear(szScEmt);
+    let li = document.createElement("li");
+    li.classList.add("title")
+    li.textContent=cc2title(crdText);
+    szScEmt.appendChild(li);
+
+    const sizeFactor = (SIZES.dataPoint.max - SIZES.dataPoint.min) / VIEW_CRD.size.values.length;
+    
+    VIEW_CRD.size.values.forEach( t => {
+        li = document.createElement("li");
+        const sizeEmt = document.createElement("div");
+        sizeEmt.classList.add("circle");
+        const pomoCrdIdx = VIEW_CRD.size.values.indexOf(t);
+        const size = SIZES.dataPoint.min + pomoCrdIdx * sizeFactor;
+        sizeEmt.style.width = size +"px";
+        sizeEmt.style.height = sizeEmt.style.width;
+        const sec = document.createElement("div");
+        sec.classList.add("sizeCtnr");
+        sec.appendChild(sizeEmt);
+        li.appendChild(sec);
+        const textEmt = document.createElement("div");
+        textEmt.textContent=cc2title(t);
+        li.appendChild( textEmt );
+        szScEmt.appendChild( li );
+    });
+}
+
 function loadSpace(slot, stack) {
     if ( slot.length ) {
         // Array - we've reached an actual dimension
@@ -186,7 +266,7 @@ function loadSpace(slot, stack) {
             const m = menus[k];
             const opt = document.createElement("option");
             opt.value = optionValue;
-            opt.textContent = optionText.replaceAll(/([A-Z])/g, " $1");
+            opt.textContent = cc2title(optionText);
             m.appendChild(opt);
         });
         dim2coords[optionValue] = slot;

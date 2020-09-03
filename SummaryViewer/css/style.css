@@ -34,11 +34,16 @@ footer {
   padding: 1rem;
 }
 
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+}
+
 .controls {
   padding: 0.5em 1rem;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
+  flex-grow: 0;
+  flex-shrink: 1;
   background-color: #eee;
   font-size: 10pt;
 }
@@ -52,8 +57,9 @@ footer {
   flex-direction: row;
 }
 
-.main {
+.vizCtnr {
   margin: auto;
+  padding: 1em;
   display: grid;
   grid-template-rows: 600px 2em 2em;
   grid-template-columns: 2em 120px 600px;
@@ -125,6 +131,44 @@ ol.axisCrds li {
   grid-row: 3/3;
   grid-column: 3/3;
   text-align: center;
+}
+
+ul.scale {
+  list-style: none;
+  padding: 0;
+  display: block;
+}
+ul.scale li.title {
+  font-weight: bold;
+  text-align: center;
+  display: block;
+}
+
+#colorScale {
+  display: block;
+}
+#colorScale ul li {
+  padding: 0.5em;
+}
+
+#sizeScale ul li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0.2em;
+}
+#sizeScale ul li div.sizeCtnr {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+#sizeScale ul li div.circle {
+  background-color: #CCC;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
 }
 
 /*# sourceMappingURL=style.css.map */
