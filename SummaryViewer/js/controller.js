@@ -43,7 +43,8 @@ const dim2coords = {};
 const vizEmts = {
     dataPoints: d3.select("#dataPoints"),
     gridH: d3.select("#grid-h"),
-    gridV: d3.select("#grid-v")
+    gridV: d3.select("#grid-v"),
+    sizeEmtSvg: document.getElementById("sizeEmtTemplate")
 };
 let initComplete = false;
 
@@ -138,10 +139,10 @@ function menuSelectionChanged( aKey, aMenu ) {
     if ( aKey === "color" ) {
         dataPointGs.selectAll("circle").transition().duration(500).style("fill",dataPointColor);
         if ( aMenu.value==="" ) {
-            $("#colorScale").collapse("hide");
+            $("#colorScale").hide();
         } else {
             updateColorScale();
-            $("#colorScale").collapse("show");
+            $("#colorScale").show();
         }
         return; // no need to move any point.
     }
@@ -149,10 +150,10 @@ function menuSelectionChanged( aKey, aMenu ) {
     if ( aKey === "size" ) {
         dataPointGs.selectAll("circle").transition().duration(500).attr("r",dataPointSize);
         if ( aMenu.value==="" ) {
-            $("#sizeScale").collapse("hide");
+            $("#sizeScale").hide();
         } else {
             updateSizeScale();
-            $("#sizeScale").collapse("show");
+            $("#sizeScale").show();
         }
     }
     if ( simulation ) {
@@ -181,6 +182,7 @@ function readMenuStates(aKey, aMenu) {
     VIEW_CRD.color.getCrd = (menus.color.value!=="") ? makeCoordinateGetter(menus.color.value) : null;
     
     VIEW_CRD.size.values = (menus.size.value!=="") ? dim2coords[menus.size.value] : [];
+    VIEW_CRD.size.crdStr = (menus.size.value!=="") ? menus.size.value : null;
     VIEW_CRD.size.force = (menus.size.value!=="") ? makeDataPointSizeFunction(menus.size.value) : null;
 
     // axes
@@ -239,16 +241,15 @@ function updateSizeScale() {
     
     VIEW_CRD.size.values.forEach( t => {
         li = document.createElement("li");
-        const sizeEmt = document.createElement("div");
-        sizeEmt.classList.add("circle");
-        const pomoCrdIdx = VIEW_CRD.size.values.indexOf(t);
-        const size = SIZES.dataPoint.min + pomoCrdIdx * sizeFactor;
-        sizeEmt.style.width = size +"px";
-        sizeEmt.style.height = sizeEmt.style.width;
-        const sec = document.createElement("div");
-        sec.classList.add("sizeCtnr");
-        sec.appendChild(sizeEmt);
-        li.appendChild(sec);
+        const sizeEmt = vizEmts.sizeEmtSvg.cloneNode(true);
+        const r = VIEW_CRD.size.force( {data:mockValue(VIEW_CRD.size.crdStr,t)});
+        const crc = sizeEmt.getElementsByTagName("circle")[0];
+        crc.setAttribute("r", r );
+        crc.setAttribute("cx", SIZES.dataPoint.max );
+        crc.setAttribute("cy", r );
+        sizeEmt.style.width= (SIZES.dataPoint.max*2)+"px";
+        sizeEmt.style.height= (r*2)+"px";
+        li.appendChild(sizeEmt);
         const textEmt = document.createElement("div");
         textEmt.textContent=cc2title(t);
         li.appendChild( textEmt );
@@ -373,6 +374,8 @@ function start() {
     SIZES.grid.cx = (SIZES.grid.w/2);
     SIZES.grid.cy = (SIZES.grid.h/2);
     COLORS.default = COLORS.scale(0.5);
+    vizEmts.sizeEmtSvg.remove();
+    vizEmts.sizeEmtSvg.removeAttribute("id");
 
     loadData().then( ()=>{
         Object.keys(menus).forEach(k =>{

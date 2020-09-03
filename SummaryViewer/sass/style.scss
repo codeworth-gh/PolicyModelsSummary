@@ -202,5 +202,15 @@ ul.scale {
             padding: 0;
             margin:0;
         }
+
+    }
+}
+
+svg.sizeEmt {
+    width: 60px; // SIZE.dataPoint.max * 2
+    height: 60px; // SIZE.dataPoint.max * 2
+
+    circle {
+        fill: #888;
     }
 }

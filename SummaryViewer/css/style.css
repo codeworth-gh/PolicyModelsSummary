@@ -171,4 +171,12 @@ ul.scale li.title {
   margin: 0;
 }
 
+svg.sizeEmt {
+  width: 60px;
+  height: 60px;
+}
+svg.sizeEmt circle {
+  fill: #888;
+}
+
 /*# sourceMappingURL=style.css.map */

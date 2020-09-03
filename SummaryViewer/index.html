@@ -21,8 +21,8 @@
                 <div><label for="sltColor">Color</label> <select name="sltColor" id="sltColor" autocomplete="off"><option value="">-const-</option></select></div>
                 <div><label for="sltSize">Size</label> <select name="sltSize" id="sltSize" autocomplete="off"><option value="">-const-</option></select></div>
                 <hr>
-                <div class="collapse" id="colorScale"><ul class="scale"></ul></div>
-                <div class="collapse" id="sizeScale"><ul class="scale"></ul></div>
+                <div style="display: none" id="colorScale"><ul class="scale"></ul></div>
+                <div style="display: none" id="sizeScale"><ul class="scale"></ul></div>
             </div>
             <div class="vizCtnr">
                 <div class="axisLabel" id="yLabel"></div>
@@ -37,6 +37,7 @@
                 <div class="axisLabel" id="xLabel"></div>
             </div>
         </div>
+        <svg id="sizeEmtTemplate" class="sizeEmt"><circle cx="30" cy="30" r="15"></circle></svg>
         <footer>
             [Data source], [citation info], [other stuff that has to go here (tbd)], [CC-BY?]
         </footer>
