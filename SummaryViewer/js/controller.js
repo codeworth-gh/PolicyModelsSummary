@@ -58,7 +58,12 @@ const menus = {
 const BY_ID = d=>d.id;
 
 function cc2title( text ) {
-    return text.replaceAll(/([A-Z])/g, " $1");
+    let retVal = text.replaceAll(/([A-Z])/g, " $1").trim();
+    while ( retVal.match(/[A-Z] [A-Z]/) ) {
+        retVal = retVal.replaceAll(/([A-Z]) ([A-Z])/g, "$1$2");
+    }
+
+    return retVal;
 }
 
 function loadData() {
