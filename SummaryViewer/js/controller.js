@@ -29,6 +29,8 @@ let id2Title;
 let simulation;
 let longestCrd;
 
+let rawData;
+
 // Simulation data
 let dataPointArr; 
 
@@ -76,10 +78,10 @@ function loadData() {
         id2Title = id2t;
     }).then( _gi => d3.json("data/summary.json")
     ).then(function(data){
+        rawData = data;
         space = data.space;
         const menuEmts = {};
         Object.keys(menus).forEach( k => menuEmts[k]=menus[k] );
-        // loadSpace(space, [], menuEmts, 1 );
         buildDimensionSelects(space, [], 0);
         longestCrd = Object.values(dim2coords).map(a=>a.length).reduce( (x,y)=>x>y?x:y );
         const tsptIds = Object.keys(data.transcripts);
