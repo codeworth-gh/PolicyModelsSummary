@@ -1,0 +1,11 @@
+{
+    "title":"dkNet Repository Evaluation",
+    "subtitle":"Fiona Murphy, Michael Bar-Sinai, Maryann E. Martone. <em> Evaluation of biomedical data repositories for sharing biomedical data against principles governing scholarly infrastructures: open, FAIR, citable and trustworthy</em>",
+    "footer":"[Data source], [citation info], [other stuff that has to go here (tbd)], [CC-BY?]",
+    "axes": {
+        "x":"DataRepoCompliance/Open",
+        "y":"DataRepoCompliance/FAIR/Reusable",
+        "size":"",
+        "color":""
+    }
+}

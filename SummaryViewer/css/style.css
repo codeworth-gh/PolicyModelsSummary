@@ -51,8 +51,8 @@ footer {
   margin: 0 0.5em 0 0;
   width: 70px;
 }
-.controls div {
-  margin: 0 1em;
+.controls > div {
+  margin: 0 1em 0.5em 1em;
   display: flex;
   flex-direction: row;
 }
@@ -99,12 +99,14 @@ ol.axisCrds li {
   grid-template-columns: 1fr;
   grid-auto-rows: 1fr;
   grid-auto-flow: row;
+  justify-items: right;
+  direction: rtl;
 }
 #yCrds li {
   display: flex;
-  justify-content: end;
   align-items: center;
   text-align: right;
+  width: 100%;
 }
 
 #yLabel {
@@ -177,6 +179,10 @@ svg.sizeEmt {
 }
 svg.sizeEmt circle {
   fill: #888;
+}
+
+.hs-menu-inner {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -21,7 +21,7 @@ const VIEW_CRD = {
   color : {}
 };
 
-const spaces="                ";
+let config;
 let space;
 const dataPoints ={};
 const nodes = [];
@@ -49,10 +49,10 @@ const vizEmts = {
 let initComplete = false;
 
 const menus = {
-    x: document.getElementById("sltX"),
-    y: document.getElementById("sltY"),
-    color: document.getElementById("sltColor"),
-    size: document.getElementById("sltSize")
+    x:     { emt: document.getElementById("selectX"),     value:"" },
+    y:     { emt: document.getElementById("selectY"),     value:"" },
+    color: { emt: document.getElementById("selectColor"), value:"" },
+    size:  { emt: document.getElementById("selectSize"),  value:"" }
 }
 
 const BY_ID = d=>d.id;
@@ -66,13 +66,21 @@ function cc2title( text ) {
     return retVal;
 }
 
+function lastSlotName( coordinateName ) {
+    let arr = coordinateName.split("/");
+    return arr[arr.length-1];
+}
+
 function loadData() {
     return d3.json("data/repoNames.json").then( id2t => {
         id2Title = id2t;
     }).then( _gi => d3.json("data/summary.json")
     ).then(function(data){
         space = data.space;
-        loadSpace(space, []);
+        const menuEmts = {};
+        Object.keys(menus).forEach( k => menuEmts[k]=menus[k] );
+        // loadSpace(space, [], menuEmts, 1 );
+        buildDimensionSelects(space, [], 0);
         longestCrd = Object.values(dim2coords).map(a=>a.length).reduce( (x,y)=>x>y?x:y );
         const tsptIds = Object.keys(data.transcripts);
         tsptIds.forEach( id => {
@@ -137,13 +145,13 @@ function makeDataPointSizeFunction( pomoCrdStr ) {
     };
 }
 
-function menuSelectionChanged( aKey, aMenu ) {
+function menuSelectionChanged( aKey ) {
     if ( ! initComplete ) return;
-    readMenuStates(aKey, aMenu);
+    readMenuStates(aKey);
     
     if ( aKey === "color" ) {
         dataPointGs.selectAll("circle").transition().duration(500).style("fill",dataPointColor);
-        if ( aMenu.value==="" ) {
+        if ( menus.color.value==="" ) {
             $("#colorScale").hide();
         } else {
             updateColorScale();
@@ -154,7 +162,7 @@ function menuSelectionChanged( aKey, aMenu ) {
 
     if ( aKey === "size" ) {
         dataPointGs.selectAll("circle").transition().duration(500).attr("r",dataPointSize);
-        if ( aMenu.value==="" ) {
+        if ( menus.size.value==="" ) {
             $("#sizeScale").hide();
         } else {
             updateSizeScale();
@@ -167,12 +175,14 @@ function menuSelectionChanged( aKey, aMenu ) {
     createSimulation();
     if ( aKey === "y" ) {
         updateHTicks();
+        updateAxis(aKey);
     } else if ( aKey ==="x" ) {
         updateVTicks();
+        updateAxis(aKey);
     }
 }
 
-function readMenuStates(aKey, aMenu) {
+function readMenuStates(aKey) {
 
     // Forces
     VIEW_CRD.x.values = dim2coords[menus.x.value];
@@ -190,16 +200,14 @@ function readMenuStates(aKey, aMenu) {
     VIEW_CRD.size.crdStr = (menus.size.value!=="") ? menus.size.value : null;
     VIEW_CRD.size.force = (menus.size.value!=="") ? makeDataPointSizeFunction(menus.size.value) : null;
 
-    // axes
-    if ( aKey === "x" || aKey==="y" ) {
-        updateAxis(aKey);
-    }
-    
 }
 
 function updateAxis(axisName) {
-    const crdText = menus[axisName].options[menus[axisName].selectedIndex].textContent;
-    document.getElementById(axisName+"Label").innerText = crdText;
+    let crdText = menus[axisName].value;
+    if ( ! crdText ) return; //still in setup.
+    crdText = crdText.split("/");
+    crdText = crdText[crdText.length-1];
+    document.getElementById(axisName+"Label").innerText = cc2title(crdText);
     const crdEmt = document.getElementById(axisName + "Crds");
     Utils.clear(crdEmt);
     let crdValues = dim2coords[menus[axisName].value];
@@ -216,7 +224,7 @@ function updateAxis(axisName) {
 
 function updateColorScale() {
     const colScEmt = document.getElementById("colorScale").getElementsByTagName("ul")[0];
-    const crdText = menus.size.options[menus.color.selectedIndex].textContent;
+    const crdText =lastSlotName(menus.color.value);
     
     Utils.clear(colScEmt);
     let li = document.createElement("li");
@@ -229,12 +237,12 @@ function updateColorScale() {
         li.textContent = cc2title(v);
         li.style.backgroundColor = dataPointColor({data:mockValue(VIEW_CRD.color.crdStr, v)});
         colScEmt.appendChild(li);
-    })
+    });
 }
 
 function updateSizeScale() {
     const szScEmt = document.getElementById("sizeScale").getElementsByTagName("ul")[0];
-    const crdText = menus.size.options[menus.size.selectedIndex].textContent;
+    const crdText = lastSlotName(menus.size.value);
     
     Utils.clear(szScEmt);
     let li = document.createElement("li");
@@ -262,27 +270,42 @@ function updateSizeScale() {
     });
 }
 
-function loadSpace(slot, stack) {
+function buildDimensionSelects(slot, slotNameStack, level) {
+    const optionText = slotNameStack[slotNameStack.length-1];
     if ( slot.length ) {
         // Array - we've reached an actual dimension
-        const optionValue = stack.join("/");
-        const optionText = stack[stack.length-1];
+        const optionValue = slotNameStack.join("/");
+        dim2coords[optionValue] = slot;
         
         Object.keys(menus).forEach(k =>{
-            const m = menus[k];
-            const opt = document.createElement("option");
-            opt.value = optionValue;
-            opt.textContent = cc2title(optionText);
-            m.appendChild(opt);
+            const emt = document.createElement("a");
+            emt.classList.add("dropdown-item");
+            emt.dataset.value=optionValue;
+            emt.dataset.level=level;
+            emt.innerText = cc2title(optionText);
+            menus[k].emt.getElementsByClassName("hs-menu-inner")[0].appendChild(emt);
         });
-        dim2coords[optionValue] = slot;
-
+        
     } else {
         // Object - expand the dimensions recursively
+        if ( optionText ) {
+            Object.keys(menus).forEach(k =>{
+                const emt = document.createElement("a");
+                emt.classList.add("dropdown-item");
+                emt.dataset.value="";
+                emt.dataset.level=level;
+                emt.ariaDisabled=true;
+                emt.classList.add("disabled");
+                emt.disabled="disabled";
+                emt.innerText = cc2title(optionText);
+                menus[k].emt.getElementsByClassName("hs-menu-inner")[0].appendChild(emt);
+            });
+        }
+        
         Object.keys(slot).forEach( k => {
-            stack.push(k);
-            loadSpace( slot[k], stack );
-            stack.pop();
+            slotNameStack.push(k);
+            buildDimensionSelects( slot[k], slotNameStack, level+1 );
+            slotNameStack.pop();
         });
     }
 }
@@ -382,15 +405,40 @@ function start() {
     vizEmts.sizeEmtSvg.remove();
     vizEmts.sizeEmtSvg.removeAttribute("id");
 
-    loadData().then( ()=>{
+    d3.json( "config.json" )
+    .then( c => {
+        config=c;
+        document.getElementById("config-title").innerHTML=config.title;
+        document.getElementById("config-subtitle").innerHTML=config.subtitle;
+        document.getElementById("config-footer").innerHTML=config.footer;
+
+        return loadData();
+    })
+    .then( ()=>{
         Object.keys(menus).forEach(k =>{
-            menus[k].addEventListener("change", ()=>menuSelectionChanged(k, menus[k]) );
+            const id = menus[k].emt.id;
+            const defaultValue = config.axes[k];
+            if ( defaultValue.length > 0 ) {
+                menus[k].emt.getElementsByClassName("d-none")[0].value = defaultValue;
+            }
+
+            $("#"+id).hierarchySelect({
+                width: 'auto',
+                initialValueSet: true,
+                search: false,
+                onChange: function (value) {
+                    menus[k].value = value;
+                    if ( initComplete ) {
+                        menuSelectionChanged(k);
+                    }
+                }
+            }); 
         });
         drawGraph();
+
     }).then(()=>{
-        menus.y.selectedIndex=1;
-        menus.color.selectedIndex=0;
-        menus.size.selectedIndex=0;
+        menus.x.value = config.axes.x;
+        menus.y.value = config.axes.y;
         updateAxis("x");
         updateAxis("y");
         readMenuStates();

@@ -4,22 +4,75 @@
         <title>PolicyModels Summary Viewer - dkNet Repository Evaluation</title>
         <link rel="stylesheet" href="vnd/bsrp/bootstrap.min.css">
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="vnd/hierarchy-select/hierarchy-select.min.css"/>
     </head>
     <body class="vbox viewport">
         <header>
-            <h1>dkNet Repository Evaluation</h1>
-            <p> 
-                Fiona Murphy, Michael Bar-Sinai, Maryann E. Martone. 
-                <em> Evaluation of biomedical data repositories for sharing biomedical data against principles governing scholarly infrastructures: open, FAIR, citable and trustworthy
-                </em>
-            </p>
+            <h1 id="config-title">Loading...</h1>
+            <p id="config-subtitle">Data will be displayed soon</p>
         </header>
         <div class="main">
-            <div class="controls">
-                <div><label for="sltX">X</label> <select name="sltX" id="sltX" autocomplete="off"></select></div>
-                <div><label for="sltY">Y</label> <select name="sltY" id="sltY" autocomplete="off"></select></div>
-                <div><label for="sltColor">Color</label> <select name="sltColor" id="sltColor" autocomplete="off"><option value="">-const-</option></select></div>
-                <div><label for="sltSize">Size</label> <select name="sltSize" id="sltSize" autocomplete="off"><option value="">-const-</option></select></div>
+            <div class="controls">  
+                <div>
+                    <label id="selectXLabel" for="selectX">X</label>
+                    <div class="dropdown hierarchy-select" id="selectX">
+                        <button type="button" class="btn btn-sm btn-info dropdown-toggle" id="selectXBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="selectXBtn">
+                            <div class="hs-searchbox">
+                                <input type="text" class="form-control" autocomplete="off">
+                            </div>
+                            <div class="hs-menu-inner">
+                            </div>
+                        </div>
+                        <input class="d-none" autocomplete="off" name="selectX" readonly="readonly" aria-hidden="true" type="text" value=""/>
+                    </div> 
+                </div>
+                <div>
+                    <label id="selectYLabel" for="selectY">Y</label>
+                    <div class="dropdown hierarchy-select" id="selectY">
+                        <button type="button" class="btn btn-sm btn-info dropdown-toggle" id="selectYBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="selectYBtn">
+                            <div class="hs-searchbox">
+                                <input type="text" class="form-control" autocomplete="off">
+                            </div>
+                            <div class="hs-menu-inner">
+                            </div>
+                        </div>
+                        <input class="d-none" autocomplete="off" name="selectY" readonly="readonly" aria-hidden="true" type="text" value=""/>
+                    </div> 
+                </div>
+                <div>
+                    <label id="selectColorLabel" for="selectColor">Color</label>
+                    <div class="dropdown hierarchy-select" id="selectColor">
+                        <button type="button" class="btn btn-sm btn-info dropdown-toggle" id="selectColorBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="selectColorBtn">
+                            <div class="hs-searchbox">
+                                <input type="text" class="form-control" autocomplete="off">
+                            </div>
+                            <div class="hs-menu-inner">
+                                <a class="dropdown-item" data-value="" href="#"><span class="badge badge-pill badge-secondary">Constant</span></a>
+                            </div>
+                        </div>
+                        <input class="d-none" autocomplete="off" name="selectColor" readonly="readonly" aria-hidden="true" type="text" value=""/>
+                    </div> 
+                </div>
+                <div>
+                    <label id="selectSizeLabel" for="selectSize">Size</label>
+                    <div class="dropdown hierarchy-select" id="selectSize">
+                        <button type="button" class="btn btn-sm btn-info dropdown-toggle" id="selectSizeBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="selectSizeBtn">
+                            <div class="hs-searchbox">
+                                <input type="text" class="form-control" autocomplete="off">
+                            </div>
+                            <div class="hs-menu-inner">
+                                <a class="dropdown-item" data-value="" href="#"><span class="badge badge-pill badge-secondary">Constant</span></a>
+                            </div>
+                        </div>
+                        <input class="d-none" autocomplete="off" name="selectSize" readonly="readonly" aria-hidden="true" type="text" value=""/>
+                    </div> 
+                </div>
+
+
                 <hr>
                 <div style="display: none" id="colorScale"><ul class="scale"></ul></div>
                 <div style="display: none" id="sizeScale"><ul class="scale"></ul></div>
@@ -28,7 +81,7 @@
                 <div class="axisLabel" id="yLabel"></div>
                 <ol class="axisCrds"  id="yCrds"></ol>
                 <svg id="viz">
-                    <g id="bkg"></g>    
+                    <g id="bkg"></g>
                     <g id="grid-h" class="grid"></g>
                     <g id="grid-v" class="grid"></g>
                     <g id="dataPoints"></g> 
@@ -38,13 +91,12 @@
             </div>
         </div>
         <svg id="sizeEmtTemplate" class="sizeEmt"><circle cx="30" cy="30" r="15"></circle></svg>
-        <footer>
-            [Data source], [citation info], [other stuff that has to go here (tbd)], [CC-BY?]
-        </footer>
+        <footer id=config-footer>Footer data loading...</footer>
         <script src="vnd/bsrp/jquery-3.5.1.slim.min.js"></script>
         <script src="vnd/bsrp/popper.min.js"></script>
         <script src="vnd/bsrp/bootstrap.min.js"></script>
         <script src="vnd/d3.min.js"></script>
+        <script src="vnd/hierarchy-select/hierarchy-select.min.js"></script>
         <script src="vnd/Utils.js"></script>
         <script src="js/controller.js"></script>
         <script>

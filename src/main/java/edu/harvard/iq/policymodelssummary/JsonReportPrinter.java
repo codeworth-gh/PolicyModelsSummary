@@ -97,7 +97,7 @@ public class JsonReportPrinter {
                     pushObj(v.getSlot().getName());
                     v.getSlot().getItemType().values().forEach( expDim -> {
                         boolean has = v.getValues().contains(expDim);
-                        printPair(v.getSlot().getName(), has?"yes":"no");
+                        printPair(expDim.getName(), has?"yes":"no");
                     });
                     popObj();
                     return null;

@@ -70,8 +70,8 @@ footer { // part of "sticky footer" pattern
         margin: 0 .5em 0 0;
         width: 70px;
     }
-    div {
-        margin: 0 1em;
+    &>div {
+        margin: 0 1em .5em 1em;
         display: flex;
         flex-direction: row;
     }
@@ -125,11 +125,14 @@ ol.axisCrds {
     grid-template-columns: 1fr;
     grid-auto-rows: 1fr;
     grid-auto-flow: row;
+    justify-items: right;
+    direction: rtl; // ugly trick to force the labels to be aligned right on webkit/blink engines
     li {
         display: flex;
-        justify-content: end;
+        // justify-content: end;
         align-items: center;
         text-align: right;
+        width: 100%;
     }
 }
 #yLabel {
@@ -213,4 +216,8 @@ svg.sizeEmt {
     circle {
         fill: #888;
     }
+}
+
+.hs-menu-inner {
+    cursor: pointer;
 }
