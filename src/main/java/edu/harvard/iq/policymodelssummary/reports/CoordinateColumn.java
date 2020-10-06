@@ -78,8 +78,9 @@ public abstract class CoordinateColumn extends ReportColumn {
                     System.err.println("WARNING: missing slot " + rowKey + " in transcript " + tspt.getName() );
                     return "1";
                 }
-                double scaled = ((double)v.getOrdinal()/v.getSlot().values().size());
-                return String.format("%.4f", scaled*9+1);                    
+                double zeroToOneValue = ( (double)(v.getOrdinal()) / (v.getSlot().values().size()-1) );
+                double scaled = (zeroToOneValue)*9.0+1.0;
+                return String.format("%.4f", scaled);                    
 
                 
             } else if ( value instanceof ExpandedSlotValue.Flag ) {
