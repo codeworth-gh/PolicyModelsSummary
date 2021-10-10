@@ -71,7 +71,12 @@
                         <input class="d-none" autocomplete="off" name="selectSize" readonly="readonly" aria-hidden="true" type="text" value=""/>
                     </div> 
                 </div>
-
+                <div>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" onchange="toggleTitles()" autocomplete="off" id="swtchDisplayTitles" checked>
+                        <label class="custom-control-label" style="width: auto" for="swtchDisplayTitles">Display titles</label>
+                      </div>
+                </div>
 
                 <hr>
                 <div style="display: none" id="colorScale"><ul class="scale"></ul></div>
@@ -91,7 +96,16 @@
             </div>
         </div>
         <svg id="sizeEmtTemplate" class="sizeEmt"><circle cx="30" cy="30" r="15"></circle></svg>
-        <footer id=config-footer>Footer data loading...</footer>
+        <footer>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-9 text-left" id="config-footer">...</div>
+                    <div class="col-3 text-right">
+                        PolicyModels SummaryViewer. <a href="https://github.com/michbarsinai/PolicyModelsSummary">Source</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
         <script src="vnd/bsrp/jquery-3.5.1.slim.min.js"></script>
         <script src="vnd/bsrp/popper.min.js"></script>
         <script src="vnd/bsrp/bootstrap.min.js"></script>

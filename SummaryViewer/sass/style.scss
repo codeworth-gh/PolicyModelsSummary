@@ -99,6 +99,7 @@ svg#viz {
     text {
         font: 10pt normal sans-serif;
         pointer-events: none;
+        transition: opacity .2s linear;
     }
 }
 

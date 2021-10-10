@@ -17,8 +17,11 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath edu.harvard.iq.policymodelssummary.mains.SummarizeTranscripts /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
+                <exec.mainClass>edu.harvard.iq.policymodelssummary.mains.Main</exec.mainClass>
+                <exec.vmArgs></exec.vmArgs>
+                <exec.appArgs>summarize /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.appArgs>
             </properties>
         </action>
         <action>
@@ -31,9 +34,12 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath edu.harvard.iq.policymodelssummary.mains.SummarizeTranscripts /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
+                <exec.mainClass>edu.harvard.iq.policymodelssummary.mains.Main</exec.mainClass>
+                <exec.vmArgs>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
+                <exec.appArgs>summarize /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.appArgs>
             </properties>
         </action>
         <action>
@@ -46,8 +52,11 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath edu.harvard.iq.policymodelssummary.mains.SummarizeTranscripts /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
+                <exec.mainClass>edu.harvard.iq.policymodelssummary.mains.Main</exec.mainClass>
+                <exec.vmArgs></exec.vmArgs>
+                <exec.appArgs>summarize /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.appArgs>
             </properties>
         </action>
     </actions>

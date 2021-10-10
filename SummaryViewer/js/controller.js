@@ -369,7 +369,18 @@ function addDataPoints() {
     dataPointGs.append("circle").attr("cx", 0).attr("cy", 0).attr("r", dataPointSize).style("fill", COLORS.default );
     dataPointGs.append("text").attr("x", 0).attr("y", 0)
             .attr("text-anchor","middle").attr("dy","0.35em")
-            .text( d => id2Title[d.data.id].title );
+            .text( resilientTitle );
+}
+
+function resilientTitle( dataPoint ) {
+    const id = dataPoint.data.id;
+    const repoNameData = id2Title[id];
+    if ( repoNameData && repoNameData.title ) {
+        return repoNameData.title;
+    } else {
+        console.log("Missing title for %o", dataPoint );
+        return id;
+    }
 }
 
 function dataPointSize(r){
@@ -449,4 +460,13 @@ function start() {
         initComplete = true;
         createSimulation();
     });
+}
+
+let isTitlesShown=true;
+
+function toggleTitles() {
+    const opc = isTitlesShown ? 0 : 1;
+    $("g text").css("opacity", opc);
+
+    isTitlesShown = !isTitlesShown;
 }

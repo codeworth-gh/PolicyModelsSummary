@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -44,7 +46,9 @@ public class TranscriptParser implements ContentHandler {
     private final PolicyModel model;
     private final Map<String, List<String>> answerIndex = new HashMap<>();
     private final LinkedList<String> stack = new LinkedList<>();
-
+    private Transcript.ModelData modelData = new Transcript.ModelData(null, 0, null, null);
+    boolean inModelMetadata = false;
+    
     public TranscriptParser(PolicyModel model) {
         this.model = model;
         prepareAnswerIndex();
@@ -57,7 +61,7 @@ public class TranscriptParser implements ContentHandler {
         try ( Reader fileRdr = Files.newBufferedReader(transcriptFile) ) {
             rdr.parse( new InputSource(fileRdr));        
         }
-        
+        result.setModelData(modelData);
         return result;
     }
 
@@ -86,39 +90,29 @@ public class TranscriptParser implements ContentHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (qName) {
-            case "Text": 
-                charAggregator.setLength(0);
-                break;
-            case "question":
+            case "Text" -> charAggregator.setLength(0);
+            case "question" -> {
                 curQnA = new Transcript.SingleQandA();
                 curQnA.questionId = atts.getValue("id");
-                break;
-            case "compound":
-                stack.push(atts.getValue("slot"));
-                break;
-            case "aggregate":
-            case "aggreate":
-                stack.push(atts.getValue("slot"));
-                break;
-            case "atomic":
-                addAtomicValue(atts.getValue("slot"), atts.getValue("ordinal"));
-                break;
+            }
+            case "compound" -> stack.push(atts.getValue("slot"));
+            case "aggregate", "aggreate" -> stack.push(atts.getValue("slot"));
+            case "atomic" -> addAtomicValue(atts.getValue("slot"), atts.getValue("ordinal"));
+            case "model"  -> inModelMetadata = true;
         }
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (qName) {
-            case "question":
+            case "question" -> {
                 result.append(curQnA);
                 curQnA = null;
-                break;
+            }
                 
-            case "text":
-                curQnA.questionText = consumeFreeText();
-                break;
-                
-            case "answer":
+            case "text" -> curQnA.questionText = consumeFreeText();
+            case "model"  -> inModelMetadata = false;    
+            case "answer" -> {
                 curQnA.answerText = consumeFreeText();
                 List<String> answers = answerIndex.get(curQnA.questionId);
                 curQnA.normalizedAnswer=-1.0;
@@ -134,30 +128,43 @@ public class TranscriptParser implements ContentHandler {
                         curQnA.normalizedAnswer = ((double)curQnA.answerOrdinal)/(answers.size()-1);
                     }
                 }
-                break;
+            }
                 
-            case "note":
-                curQnA.note = Optional.of(consumeFreeText());
-                break;
-           
-            case "value":
-                addAggregateValue(consumeFreeText());
-                break;
-               
-            case "atomic":
-            case "id":
-            case "version":
-            case "localization":
-            case "time":
-                consumeFreeText(); // just flush it
-                break;
-                
-            case "compound":
-            case "aggregate":
-            case "aggreate":
-                stack.pop();
-                break;
-                
+            case "note" -> curQnA.note = Optional.of(consumeFreeText());
+            case "value" -> addAggregateValue(consumeFreeText());
+            case "atomic" -> consumeFreeText(); // just flush it
+            case "compound", "aggregate", "aggreate" -> stack.pop();
+            case "id" -> {
+                if ( inModelMetadata ) {
+                    modelData = new Transcript.ModelData(consumeFreeText(), modelData.version(), modelData.localization(), modelData.time() );
+                } else {
+                    consumeFreeText();
+                }
+            }
+            case "version" -> {
+                if ( inModelMetadata ) {
+                    modelData = new Transcript.ModelData(modelData.id(), Integer.parseInt(consumeFreeText().trim()), modelData.localization(), modelData.time() );
+                } else {
+                    consumeFreeText();
+                }
+            }
+            case "localization" -> {
+                if ( inModelMetadata ) {
+                    modelData = new Transcript.ModelData(modelData.id(), modelData.version(), consumeFreeText().trim(), modelData.time() );
+                } else {
+                    consumeFreeText();
+                }
+            }
+            case "time" -> {
+                if ( inModelMetadata ) {
+                    String raw = consumeFreeText().trim();
+                    long millies = Long.parseLong(raw);
+                    LocalDateTime tme = LocalDateTime.ofEpochSecond(millies, 0, ZoneOffset.UTC);
+                    modelData = new Transcript.ModelData(modelData.id(), modelData.version(), modelData.localization(), tme );
+                } else {
+                    consumeFreeText();
+                }
+            }
         }
     }
     

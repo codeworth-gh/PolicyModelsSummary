@@ -3,9 +3,9 @@
         "title": "MWB",
         "id": "MetabolomicsWorkbench"
     },
-    "AMP2d": {
-        "title": "AMP2d",
-        "id": "AMP2d"
+    "AMP-T2D": {
+        "title": "AMP-T2D",
+        "id": "AMP-T2D"
     },
     "NIHFigshare": {
         "title": "NIH Fg",
@@ -18,5 +18,17 @@
     "CIL": {
         "title": "CIL",
         "id": "CIL"
+    },
+    "Zenodo": {
+        "title":"Zenodo",
+        "id":"Zenodo"
+    },
+    "FlCy": {
+        "title": "Flow Cy",
+        "id":"FlCy"
+    },
+    "IDR": {
+        "title": "IDR",
+        "id":"IDR"
     }
 }

@@ -9,6 +9,7 @@ import edu.harvard.iq.policymodels.model.policyspace.values.AggregateValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.AtomicValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.CompoundValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.ToDoValue;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -102,6 +103,11 @@ public abstract class ExpandedSlotValue<T> {
             return -2;
         }
     };
+    
+    public static ExpandedSlotValue<?> lookup( CompoundValue root, String path ) {
+        String[] comps = path.split("/");
+        return lookup(root, Arrays.asList(comps) );
+    }
     
     public static ExpandedSlotValue<?> lookup( CompoundValue root, List<String> path ) {
         CompoundSlot rootSlot = root.getSlot();

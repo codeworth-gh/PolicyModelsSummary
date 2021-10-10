@@ -1,6 +1,7 @@
 package edu.harvard.iq.policymodelssummary;
 
 import edu.harvard.iq.policymodels.model.policyspace.values.CompoundValue;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,9 +83,11 @@ public class Transcript {
         public String toString() {
             return "[SingleQandA questionId=" + questionId + ", questionText=" + questionText.substring(0,10) + ", note=" + note + ", answer=" + answerText + " (" + answerOrdinal + "," + normalizedAnswer + ")]";
         }
-        
-        
     }
+    
+    public record ModelData( String id, int version, String localization, LocalDateTime time){}
+    
+    
     
     /** 
      * Transcript filename.
@@ -93,6 +96,7 @@ public class Transcript {
     private final List<SingleQandA> answerSeq = new ArrayList<>();
     private final Map<String, SingleQandA> answerMap = new HashMap<>();
     private CompoundValue coordinate;
+    private ModelData modelData;
     
     public void append( SingleQandA sa ) {
         answerSeq.add(sa);
@@ -115,6 +119,14 @@ public class Transcript {
         this.name = name;
     }
 
+    public ModelData getModelData() {
+        return modelData;
+    }
+
+    public void setModelData(ModelData modelData) {
+        this.modelData = modelData;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;
