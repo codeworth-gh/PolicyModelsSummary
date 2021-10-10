@@ -8,11 +8,18 @@ import static edu.harvard.iq.policymodelssummary.DiffResult.Subject.*;
 import edu.harvard.iq.policymodelssummary.Transcript.SingleQandA;
 import edu.harvard.iq.policymodelssummary.policyspace.ExpandedSlotValue;
 import edu.harvard.iq.policymodelssummary.policyspace.SlotPathCollector;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateExceptionHandler;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,13 +46,13 @@ public class TranscriptDiffMaker extends RunMode {
             System.exit(-1);
         }
         
-        for ( int i=1; i<3; i++ ) {
-            files[i] = Paths.get(args[i]).toAbsolutePath().normalize();
+        for ( int i=0; i<2; i++ ) {
+            files[i] = Paths.get(args[i+1]).toAbsolutePath().normalize();
             if ( ! Files.exists(files[i]) ) {
                 System.err.printf("Input file %s does not exist\n", files[i].toString());
                 System.exit(-2);
             }
-            System.out.printf("File %d: %s", i, files[i]);
+            o.println(String.format("File %d: %s", i, files[i]));
         }
         
         if ( files[0].equals(files[1]) ) {
@@ -63,6 +70,26 @@ public class TranscriptDiffMaker extends RunMode {
     public void go() throws Exception {
         DiffResult diff = makeDiff();
         // now write the HTML report.
+        
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
+        cfg.setDefaultEncoding("UTF-8");
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+        cfg.setLogTemplateExceptions(false);
+        cfg.setWrapUncheckedExceptions(true);
+        cfg.setFallbackOnNullLoopVariable(false);
+        cfg.setClassForTemplateLoading(getClass(), "/");
+        
+        try ( Writer ow = Files.newBufferedWriter(files[1].resolveSibling("diff.html")) ) {
+            Template tpl = cfg.getTemplate("/diff-report.html");
+            Map<String,Object> data = new HashMap<>();
+            data.put("diff", diff);
+            data.put("time", LocalDateTime.now());
+            data.put("fileA", files[0]);
+            data.put("fileB", files[1]);
+            data.put("modelFile", modelPath);
+            System.out.println("modelPath = " + modelPath);
+            tpl.process(data, ow);
+        }
     }
     
     public DiffResult makeDiff() throws Exception {
@@ -111,11 +138,13 @@ public class TranscriptDiffMaker extends RunMode {
         
         // coordinate compare
         if ( ! a.getCoordinate().equals(b.getCoordinate()) ) {
+            System.out.println("Coordinates are not the same");
             var spc = new SlotPathCollector();
             var slotsA = spc.collect(a.getCoordinate());
             var slotsB = spc.collect(b.getCoordinate());
             
             if ( ! slotsA.equals(slotsB) ) {
+                System.out.println("Slots are not the same");
                 var amb = new TreeSet<>(slotsA);
                 amb.removeAll(slotsB);
                 if ( ! amb.isEmpty() ) {
@@ -134,8 +163,10 @@ public class TranscriptDiffMaker extends RunMode {
             
             slotsA.retainAll(slotsB);
             slotsA.forEach( path -> {
-                var va = ExpandedSlotValue.lookup(a.getCoordinate(), path);
-                var vb = ExpandedSlotValue.lookup(b.getCoordinate(), path);
+                List<String> pathList = Arrays.asList(path.split("/"));
+                pathList = pathList.subList(1, pathList.size());
+                var va = ExpandedSlotValue.lookup(a.getCoordinate(), pathList);
+                var vb = ExpandedSlotValue.lookup(b.getCoordinate(), pathList);
                 if ( ! va.equals(vb) ) {
                     res.add( new CoordinateDiff(path, va, vb) );
                 }

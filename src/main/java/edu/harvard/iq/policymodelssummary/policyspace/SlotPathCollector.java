@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.joining;
 public class SlotPathCollector {
     
     public List<String> collect(CompoundValue root) {
-        List<String> coordinateString = new ArrayList<>();
+        List<String> dimensionNames = new ArrayList<>();
         
         root.accept(new AbstractValue.Visitor<Void>() {
             
@@ -26,29 +26,28 @@ public class SlotPathCollector {
             
             @Override
             public Void visitToDoValue(ToDoValue v) {
-                coordinateString.add(stackToPath() + ": TODO");
+                dimensionNames.add(stackToPath());
                 return null;
             }
 
             @Override
             public Void visitAtomicValue(AtomicValue v) {
-                coordinateString.add( stackToPath() + "/" + v.getSlot().getName() + ": " + v.getName() );
+                dimensionNames.add( stackToPath() + "/" + v.getSlot().getName());
                 return null;
             }
 
             @Override
             public Void visitAggregateValue(AggregateValue v) {
-                coordinateString.add( stackToPath() + "/" + v.getSlot().getName() + ": " 
-                                + v.getValues().stream().map( w->w.getName()).sorted().collect(joining(",")));
+                dimensionNames.add( stackToPath() + "/" + v.getSlot().getName() );
                 return null;
             }
 
             @Override
             public Void visitCompoundValue(CompoundValue v) {
-                stack.push( v.getSlot().getName() );
+                stack.add( v.getSlot().getName() );
                 v.getNonEmptySubSlots().stream().sorted((a,b)->a.getName().compareTo(b.getName()))
                     .forEach(slt -> v.get(slt).accept(this));
-                stack.pop();
+                stack.removeLast();
                 return null;
             }
             
@@ -56,8 +55,8 @@ public class SlotPathCollector {
                 return stack.stream().collect(joining("/"));
             }
         });
-        Collections.sort(coordinateString);
-        return coordinateString;
+        Collections.sort(dimensionNames);
+        return dimensionNames;
     }
     
 }

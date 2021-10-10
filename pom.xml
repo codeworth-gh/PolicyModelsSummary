@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
-        <exec.mainClass>edu.harvard.iq.policymodelssummary.mains.SummarizeTranscripts</exec.mainClass>
+        <exec.mainClass>edu.harvard.iq.policymodelssummary.mains.Main</exec.mainClass>
     </properties>
     <repositories>
         <repository>
@@ -33,6 +33,11 @@
             <artifactId>PolicyModelsLib</artifactId>
             <version>1.9.10</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.31</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

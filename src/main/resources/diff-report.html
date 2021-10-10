@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Interview Transcript Diff</title>
+        <style>
+            <#include "css-report.css">
+        </style>
+    </head>
+    <body>
+        <h1>Diff: ${diff.model.metadata.title}</h1>
+        
+        <h2>Metadata</h2>
+        <ul class="metadata">
+            <li>Created: <em>${time}</em></li>
+            <li>Model: <em>${modelFile}</em></li>
+            <li>Transcripts:
+                <ul>
+                    <li class="a">A: ${fileA}</li>
+                    <li class="b">B: ${fileB}</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <#if diff.hasMessages >
+            <h2>Messages</h2>
+            <ul>
+                <#list diff.messages as msg>
+                <li class="${msg.subject()}">${msg.subject()}: ${msg.message()}</li>
+                </#list>
+            </ul>
+
+        </#if>
+        
+        <h2>Coordinate Differences</h2>
+        
+        <#if diff.hasCoordinateDiffs>
+
+            <ul>
+            <#list diff.coordinateDiffs as diff>
+                <li>
+                    ${diff.path()}: <code class="A">A: ${diff.valueA().nameString()} (${diff.valueA().ordinal()})</code> vs. <code class="B">B: ${diff.valueB().nameString()} (${diff.valueB().ordinal()})</code>
+                </li>
+            </#list>
+            </ul>
+        <#else>
+            <div class="identical">Both interviews arrived at the same coordinate.</div>
+        </#if>
+        
+        <h2>Answer Differences</h2>
+        
+        <footer>
+            Report created using PolicyModels Summary. <a href="https://github.com/michbarsinai/PolicyModelsSummary">https://github.com/michbarsinai/PolicyModelsSummary</a>
+        </footer>
+    </body>
+</html>

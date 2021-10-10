@@ -110,10 +110,10 @@ public class TranscriptParser implements ContentHandler {
                 curQnA = null;
             }
                 
-            case "text" -> curQnA.questionText = consumeFreeText();
+            case "text" -> curQnA.questionText = consumeFreeText().trim();
             case "model"  -> inModelMetadata = false;    
             case "answer" -> {
-                curQnA.answerText = consumeFreeText();
+                curQnA.answerText = consumeFreeText().trim();
                 List<String> answers = answerIndex.get(curQnA.questionId);
                 curQnA.normalizedAnswer=-1.0;
                 if ( answers==null ) {
@@ -130,13 +130,13 @@ public class TranscriptParser implements ContentHandler {
                 }
             }
                 
-            case "note" -> curQnA.note = Optional.of(consumeFreeText());
-            case "value" -> addAggregateValue(consumeFreeText());
+            case "note" -> curQnA.note = Optional.of(consumeFreeText().trim());
+            case "value" -> addAggregateValue(consumeFreeText().trim());
             case "atomic" -> consumeFreeText(); // just flush it
             case "compound", "aggregate", "aggreate" -> stack.pop();
             case "id" -> {
                 if ( inModelMetadata ) {
-                    modelData = new Transcript.ModelData(consumeFreeText(), modelData.version(), modelData.localization(), modelData.time() );
+                    modelData = new Transcript.ModelData(consumeFreeText().trim(), modelData.version(), modelData.localization(), modelData.time() );
                 } else {
                     consumeFreeText();
                 }
@@ -150,7 +150,7 @@ public class TranscriptParser implements ContentHandler {
             }
             case "localization" -> {
                 if ( inModelMetadata ) {
-                    modelData = new Transcript.ModelData(modelData.id(), modelData.version(), consumeFreeText().trim(), modelData.time() );
+                    modelData = new Transcript.ModelData(modelData.id(), modelData.version(), consumeFreeText().trim().trim(), modelData.time() );
                 } else {
                     consumeFreeText();
                 }
@@ -159,7 +159,7 @@ public class TranscriptParser implements ContentHandler {
                 if ( inModelMetadata ) {
                     String raw = consumeFreeText().trim();
                     long millies = Long.parseLong(raw);
-                    LocalDateTime tme = LocalDateTime.ofEpochSecond(millies, 0, ZoneOffset.UTC);
+                    LocalDateTime tme = LocalDateTime.ofEpochSecond(millies/1000, 0, ZoneOffset.UTC);
                     modelData = new Transcript.ModelData(modelData.id(), modelData.version(), modelData.localization(), tme );
                 } else {
                     consumeFreeText();

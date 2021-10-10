@@ -21,7 +21,8 @@
                 <exec.executable>java</exec.executable>
                 <exec.mainClass>edu.harvard.iq.policymodelssummary.mains.Main</exec.mainClass>
                 <exec.vmArgs></exec.vmArgs>
-                <exec.appArgs>summarize /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.appArgs>
+                <exec.appArgs>diff in/model in/repo1.xml in/repo2.xml</exec.appArgs>
+                <exec.workingdir>WORK</exec.workingdir>
             </properties>
         </action>
         <action>
@@ -39,7 +40,8 @@
                 <jpda.listen>true</jpda.listen>
                 <exec.mainClass>edu.harvard.iq.policymodelssummary.mains.Main</exec.mainClass>
                 <exec.vmArgs>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
-                <exec.appArgs>summarize /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.appArgs>
+                <exec.appArgs>diff in/model in/repo1.xml in/repo2.xml</exec.appArgs>
+                <exec.workingdir>WORK</exec.workingdir>
             </properties>
         </action>
         <action>
@@ -56,7 +58,8 @@
                 <exec.executable>java</exec.executable>
                 <exec.mainClass>edu.harvard.iq.policymodelssummary.mains.Main</exec.mainClass>
                 <exec.vmArgs></exec.vmArgs>
-                <exec.appArgs>summarize /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNET-DecisionTrees/data-repo-compliance /Users/michael/Documents/PhD/IQSS/Data-Tags/SubProjects/Force11/work/dkNet-evaluations/n/</exec.appArgs>
+                <exec.appArgs>diff in/model in/repo1.xml in/repo2.xml</exec.appArgs>
+                <exec.workingdir>WORK</exec.workingdir>
             </properties>
         </action>
     </actions>

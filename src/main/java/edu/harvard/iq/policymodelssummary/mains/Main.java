@@ -29,8 +29,11 @@ public class Main {
                     new SummarizeTranscripts().go(Paths.get(args[1]), Paths.get(args[2]));
                     break;
                 case "diff":
-                    String[] shiftedArgs = new String[args.length-1];
-                    System.arraycopy(args, 1, shiftedArgs, 0, shiftedArgs.length);
+                    String[] shiftedArgs = new String[3];
+                    for ( int i=1; i<args.length; i++ ){
+                        shiftedArgs[i-1] = args[i];
+                    }
+                    
                     new TranscriptDiffMaker(shiftedArgs).go();
                     break;
             }

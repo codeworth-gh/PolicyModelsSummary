@@ -1,0 +1,4 @@
+[Trustworthy: comply
+    [GovernanceTransparency=partial; StakeholderGovernance=weak; SourceOpen=partially -> minorConcerns ]
+    [GovernanceTransparency=full; StakeholderGovernance=full; SourceOpen=yes -> noConcerns ]
+]

@@ -66,6 +66,18 @@ public class DiffResult {
         return answerDiffs;
     }
     
+    public boolean isHasMessages() {
+        return ! getMessages().isEmpty();
+    }
+    
+    public boolean isHasCoordinateDiffs() {
+        return ! getCoordinateDiffs().isEmpty();
+    }
+    
+    public boolean isHasAnswerDiffs() {
+        return ! getAnswerDiffs().isEmpty();
+    }
+    
     public Transcript getTranscript(Subject s){
         switch (s) {
             case A -> { return transcripts.get(0); }

@@ -1,0 +1,33 @@
+no: no
+yes: yes
+somewhat: somewhat
+adequate: adequate
+all: all
+allowed: allowed
+best: best
+by evidence: by evidence
+by policy: by policy
+dataset level: dataset level
+enforced: enforced
+full: full
+good: good
+limited: limited
+minimal: minimal
+minimal restrictions: minimal restrictions
+no license: no license
+no restrictions: no restrictions
+no support: no support
+none: none
+partial: partial
+repository level: repository level
+required: required
+rich: rich
+significant but not justified restrictions: significant but not justified restrictions
+significant restrictions: significant restrictions
+some: some
+supported: supported
+unclear: unclear
+weak: weak
+worst: worst
+somewhat open:somewhat open
+closed:closed

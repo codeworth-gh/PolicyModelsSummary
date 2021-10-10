@@ -1,0 +1,346 @@
+<*
+ * Data repository evaluation.
+ * CC-BY by authors - see policy-model.xml
+ *>
+[call: pPessimisticSetup]
+[>acc< ask: 
+  {text: Does the repository provide access to the data with minimal or no restrictions? }
+  {answers:
+    {no restrictions: 
+        [set: Restrictions=none] }
+    {minimal restrictions: 
+        [set: Restrictions=minimal] }
+    {significant restrictions: 
+        [set: Restrictions=significant] }
+    {significant but not justified restrictions: 
+        [set: Restrictions=significant; OpenFlags+=restrictionsNotJustified] }
+  }
+]
+[>reuse< ask: 
+  {text:Are you free to download the data and reuse it with no or minimal restrictions? }
+  {answers:
+    {yes: [set: OpenFlags+=openFormat; AccessibleFlags+=machineAccessible]}
+    {somewhat: [set: AccessibleFlags+=machineAccessible]}
+    {no: <* do nothing *>}
+  }
+]
+[>lic-clr< ask: 
+  {text: Does the repository provide a clear license for reuse of the data?}
+  {answers:
+    {   dataset level: [set: ReuseLicense=datasetLevel;    AccessibleFlags+=licenseOK; Accessible=partiallyAccessible] }
+    {repository level: [set: ReuseLicense=repositoryLevel; AccessibleFlags+=licenseOK; Accessible=partiallyAccessible] }
+    {      no license: [set: ReuseLicense=none; CCLicenseCompliance=none] }
+  }
+]
+[when:
+  { AccessibleFlags+=licenseOK :
+    [>lic-cc< ask: 
+      {text: Are the data covered by a commons-compliant license?}
+      {answers:
+        {best:         [set: CCLicenseCompliance=full;     OpenFlags+=ccLicenseOK]}
+        {good:         [set: CCLicenseCompliance=good;     OpenFlags+=ccLicenseOK]}
+        {somewhat open:[set: CCLicenseCompliance=adequate; OpenFlags+=ccLicenseOK]}
+        {closed:       [set: CCLicenseCompliance=nonCompliant]}
+      }
+    ]
+  }
+]
+[>plat< ask: 
+  {text: Does the repository platform make it easy to work with (e.g. download/re-use) the data?}
+  {answers:
+    {yes: [set: OpenFlags+=platformSupportsDataWork] }
+  }
+]
+[>ru-doc< ask: 
+  {text: Does the repository require or support documentation that aids in proper (re)-use of the data?}
+  {answers:
+    {    best: [set: DocumentationLevel=full;     ReusableFlags+=documentationOK]}
+    {    good: [set: DocumentationLevel=good;     ReusableFlags+=documentationOK]}
+    {adequate: [set: DocumentationLevel=adequate; ReusableFlags+=documentationOK]}
+    {   worst: [set: DocumentationLevel=lacking]}
+  }
+]
+[>sch-ui< ask: 
+  {text: Does the repository provide a search facility for the data and metadata?}
+  {answers:
+    {yes: [set:FindableFlags+=internalSearchOK; Findable=partiallyFindable]}
+}]
+[>pid-g< ask: 
+  {text: Does the repository assign globally unique and persistent identifiers (PID)? }
+  {answers:
+    {yes: [set: PersistentIdentifier=externalPID; Findable=partiallyFindable] }
+    { no:
+      [>pid-l< ask: 
+        {text:  Does the repository allows users to self assign an identifier to a data set or data contribution?}
+        {answers:
+          {yes: [set: PersistentIdentifier=internalPID; Findable=partiallyFindable] }
+          { no: [set: PersistentIdentifier=none]}
+        }
+      ]
+    }
+  }
+]
+[consider:
+  {slot: PersistentIdentifier }
+  {options: {none:}} <-- Hack to get PersistentIdentifier \in (internalPID, externalPID)
+  {else:
+    [>land-pg< ask: 
+      {text:Does the PID or other dataset identifier resolve to a landing page that describes the data? }
+      {answers:
+        {yes: [set: AccessibleFlags+=humanAccessible; Findable=partiallyFindable; MachineReadableLandingPage=exists]}
+      }
+    ]
+    [>md-pid< ask: 
+      {text: Does the metadata clearly and explicitly include the identifier of the data it describes?}
+      {answers:
+        { all: [set:IdInMetadata=all;     Findable=partiallyFindable]}
+        {some: [set:IdInMetadata=partial; Findable=partiallyFindable]}
+        {none: [set:IdInMetadata=none]}
+      }
+    ]
+  }
+]
+[>orcid< ask: 
+  {text: Does the repository allow the authors to associate their ORCID ID with a dataset?}
+  {answers:
+    { required: [set: OrcidAssociation=required;  Citable=partiallyCitable]}
+    {supported: [set: OrcidAssociation=supported; Citable=partiallyCitable]}
+    {     none: [set: OrcidAssociation=none]}
+  }
+]
+[>md-level<ask: 
+  {text:Does the repository support the addition of rich metadata to promote search and reuse of data? }
+  {answers:
+    {   rich: [set: MetadataGrade=rich;    Findable=partiallyFindable]}
+    {limited: [set: MetadataGrade=limited; Findable=partiallyFindable]}
+    {minimal: [set: MetadataGrade=minimal] }
+  }
+]
+[>md-prv< ask: 
+  {text: Are the (meta)data associated with detailed provenance?}
+  {answers:
+    { best: [set: MetadataProvenance=full; ReusableFlags+=metadataProvenanceOK; Reusable=partiallyReusable]}
+    { good: [set: MetadataProvenance=adequate; ReusableFlags+=metadataProvenanceOK; Reusable=partiallyReusable] }
+    {worst: [set: MetadataProvenance=unclear]}
+  }
+]
+[>md-daci<ask: 
+  {text: Does the repository provide the required metadata for supporting data citation?}
+  {answers:
+    {      full: [set: CitationMetadataLevel=full; Citable=partiallyCitable]}
+    {   partial: [set: CitationMetadataLevel=partial; Citable=partiallyCitable]}
+    {no support: [set: CitationMetadataLevel=none]}
+  }
+]
+[>md-ref< ask: 
+  {text: Do the metadata include qualified references to other (meta)data?}
+  {answers:
+    {best:  [set: MetadataReferenceQuality=formal;   InteroperableFlags+=qualifiedMetadataReferencesOK; Interoperable=partiallyInteroperable]}
+    {good:  [set: MetadataReferenceQuality=informal; InteroperableFlags+=qualifiedMetadataReferencesOK; Interoperable=partiallyInteroperable]}
+    {worst: [set: MetadataReferenceQuality=freeText]}
+  }
+]
+[>md-lnk< ask: 
+  {text: If the data were published in the context of an accompanying scientific paper, does the repository support bidirectional linkage between them?}
+  {answers:
+    {best:    [set: StudyLinkage=machineReadableMetadata; InteroperableFlags+=studyLinkageOK]}
+    {good:    [set: StudyLinkage=textualMetadata; InteroperableFlags+=studyLinkageOK]}
+    {unclear: [set: StudyLinkage=freeText]}
+    {worst:   [set: StudyLinkage=none]}
+  }
+]
+[>fmt-com< ask: 
+  {text: Does the repository enforce or allow the use of community standards for data format or metadata?}
+  {answers:
+    {yes: [set: ReusableFlags+=communityStandard; Reusable=partiallyReusable] }
+  }
+]
+[>md-dkn< ask: 
+  {text:Does the repository accept metadata that is applicable to the dkNET community disciplines?}
+  {answers:
+    {best:  [set: DkNetMetadataLevel=datasetAndSubject; ReusableFlags+=dkNetMetadataOK; Reusable=partiallyReusable]}
+    {good:  [set: DkNetMetadataLevel=dataset; ReusableFlags+=dkNetMetadataOK; Reusable=partiallyReusable]}
+    {worst: [set: DkNetMetadataLevel=none]}
+  }
+]
+[>md-psst< ask: 
+  {text: Does the repository have a policy that ensures the metadata (landing page) will persist even if the data are no longer available? }
+  {answers:
+    {  by policy: [set: MetadataPersistence=byStatedPolicy; AccessibleFlags+=persistentMetadata;
+                        Accessible=partiallyAccessible; MachineReadableLandingPage=exists]}
+    {by evidence: [set: MetadataPersistence=byEvidence; AccessibleFlags+=persistentMetadata;
+                        Accessible=partiallyAccessible; MachineReadableLandingPage=exists]}
+    {         no: [set: MetadataPersistence=no]}
+  }
+]
+[>md-FAIR< ask: 
+  {text: Do the metadata use vocabularies that follow FAIR principles?}
+  {answers:
+    {enforced: [set: MetadataFAIRness=enforced; InteroperableFlags+=fairMetadataOK; Interoperable=partiallyInteroperable]}
+    {allowed:  [set: MetadataFAIRness=allowed;  InteroperableFlags+=fairMetadataOK; Interoperable=partiallyInteroperable]}
+    {minimal:  [set: MetadataFAIRness=minimal]}
+  }
+]
+[consider: <-- If we haven't discovered yet whether there's a landing page or not, ask explicitly
+  {slot: MachineReadableLandingPage}
+  {options: {exists:} }
+  {else:
+    [>land-api< ask: 
+      {text: Does the repository provide a machine-readable landing page?}
+      {answers:
+        {yes: [set: MachineReadableLandingPage=exists]}
+        { no: [set: MachineReadableLandingPage=none]}
+      }
+    ]
+  }
+]
+[when:
+  {MachineReadableLandingPage=exists:
+    [set: Citable=partiallyCitable]
+    [>land-ctsp< ask:
+      {text: Does the landing page supports data citation?}
+      {answers:
+        {yes: [set: MachineReadableLandingPage=supportsDataCitation]}
+      }
+    ]
+  }
+]
+
+[>md-cs< ask: 
+  {text: Does the repository use a recognized community standard for representing basic metadata?}
+  {answers:
+    {yes: [set: ReusableFlags+=generalMetadata; Reusable=partiallyReusable]}
+  }
+]
+[>acc-api< ask: 
+  {text: Can the (meta)data be accessed via a standards compliant API?}
+  {answers:
+    {yes: [set: AccessibleFlags+=stdApi; Accessible=partiallyAccessible]}
+  }
+]
+[>md-vcb< ask: 
+  {text: Do the metadata use a formal, accessible, shared and broadly applicable language for knowledge representation?}
+  {answers:
+      {yes: [set: InteroperableFlags+=formalMetadataVocabularyOK; Interoperable=partiallyInteroperable]}
+  }
+]
+[>sch-api< ask: 
+  {text: Does the repository provide API-based search and access to the data and metadata?}
+  {answers:
+    {yes: [set: AccessibleFlags+=machineAccessible; Findable=partiallyFindable]}
+}]
+[>gov-tsp<ask: 
+  {text: Is the governance of the repository transparent?}
+  {answers:
+    { best: [set: GovernanceTransparency=full]}
+    { good: [set: GovernanceTransparency=partial]}
+    {worst: [set: GovernanceTransparency=opaque]}
+  }
+]
+[consider:
+  {slot: GovernanceTransparency}
+  {options: {opaque:}}
+  {else:
+    [>gov-stk<ask: 
+      {text: Is the repository stakeholder governed?}
+      {answers:
+        {full:[set: StakeholderGovernance=full]}
+        {good:[set: StakeholderGovernance=good]}
+        {weak:[set: StakeholderGovernance=weak]}
+        {none:[set: StakeholderGovernance=none]}
+      }
+    ]
+  }
+]
+[>oss< ask: 
+  {text: Is the code that runs the data infrastructure covered under an open source license?}
+  {answers:
+    {best: [set: SourceOpen=yes]}
+    {good: [set: SourceOpen=partially]}
+    {  no: [set: SourceOpen=no]}
+  }
+]
+[>tr-seal< ask: 
+  {text: Has the repository been certified by Data Seal of Approval or the Core Trust Seal? }
+  {answers:
+    {yes:[set: Trustworthy=noConcerns]}
+  }
+]
+[call: pInference]
+
+<****************>
+
+<** 
+  Infer relevant repository properties, based on the answer collected. 
+  *>
+[-->pInference<
+[when: <-- Setting Findable
+  {FindableFlags+=internalSearchOK; PersistentIdentifier=externalPID; MetadataGrade=rich; IdInMetadata=all:
+    [set: Findable=fullyFindable]}]
+
+[when: <-- Setting Accessible
+  {AccessibleFlags+=licenseOK, persistentMetadata, humanAccessible, machineAccessible, stdApi: 
+    [set: Accessible=fullyAccessible]}
+  {AccessibleFlags+=machineAccessible: <-- This flag can be set in multiple places, so we apply its effect here.
+    [set: Accessible=partiallyAccessible]}
+]
+
+[when: <-- Setting Interoperable
+  {InteroperableFlags+=formalMetadataVocabularyOK,fairMetadataOK,qualifiedMetadataReferencesOK,studyLinkageOK:
+     [set: Interoperable=fullyInteroperable]}]
+
+[when: <-- Setting Reusable
+  {ReusableFlags+=communityStandard,documentationOK,dkNetMetadataOK,generalMetadata,metadataProvenanceOK:
+   [set: Reusable=fullyReusable]}
+  {ReusableFlags+=documentationOK: [set: Reusable=partiallyReusable]}
+]
+
+[when: <-- Setting Citable
+  {Citable=partiallyCitable; CitationMetadataLevel=full; MachineReadableLandingPage=supportsDataCitation:
+    [set: Citable=fullyCitable]}
+  {MachineReadableLandingPage=supportsDataCitation: [set: Citable=partiallyCitable]}
+]
+
+[when: <-- Setting Trustworthy
+  {SourceOpen=yes; StakeholderGovernance=full; GovernanceTransparency=full: [set: Trustworthy=noConcerns]}
+  {SourceOpen=no; StakeholderGovernance=none; GovernanceTransparency=opaque: [set: Trustworthy=significantConcerns]}
+  {else: [set: Trustworthy=minorConcerns]}
+]
+
+[consider: <-- Setting Open
+  {slot: CCLicenseCompliance}
+  {options:
+    { nonCompliant: [set: Open=closed] } <-- for statement only, as this is already set in >pPessimisticSetup<. 
+  }
+  {else:
+    [when: 
+      {OpenFlags+=openFormat, ccLicenseOK, platformSupportsDataWork:
+        [consider:
+          {slot: Restrictions}
+          {options:
+            {none: [set: Open=fullyOpen] }
+          }
+          {else: [set: Open=partiallyOpen]}
+        ]
+      }
+      {OpenFlags+=openFormat:  [set: Open=partiallyOpen] }
+      {OpenFlags+=ccLicenseOK: [set: Open=partiallyOpen] }
+      {OpenFlags+=platformSupportsDataWork: [set: Open=partiallyOpen] }
+      {Restrictions=minimal: [set: Open=partiallyOpen] }
+      {Restrictions=none:    [set: Open=partiallyOpen] }
+    ]
+  }
+]
+
+--]
+
+<** 
+  Initially, set the evaluation values to be pessimistic. They will (hopefully) improve during the interview.
+*>
+[-->pPessimisticSetup<
+  [set: Open=closed;
+        Findable=notFindable; Accessible=notAccessible; Interoperable=notInteroperable; 
+        Reusable=notReusable; Citable=notCitable; Trustworthy=significantConcerns
+  ]
+--]
+

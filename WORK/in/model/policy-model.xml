@@ -1,0 +1,54 @@
+<policy-model>
+  <title>dkNET-Repository Compliance</title>
+  <date>2020-09-13</date>
+  <version>1.0.0</version>
+  <model answers-order="yes-first">
+    <space root="DataRepoCompliance">definitions.pspace</space>
+    <graph>sc-drc.dg</graph>
+  </model>
+  <!-- <valueInferrer>tagInference.vi</valueInferrer> -->
+  <keywords>repository, FAIR, Force11, software, dkNET</keywords>
+  <authors>
+    <person orcid="0000-0002-8406-3871">
+      <name>Maryann E. Martone</name>
+      <affiliation>University of California, San Diego</affiliation>
+      <email>mmartone@ucsd.edu</email>
+    </person>
+    <person orcid="0000-0003-1693-1240">
+      <name>Fiona Murphy</name>
+      <affiliation>University of Reading</affiliation>
+      <email>fiona.murphy@reading.ac.uk</email>
+    </person>
+    <person orcid="0000-0002-0153-8465">
+      <name>Michael Bar-Sinai</name>
+      <affiliation>Ben-Gurion University of the Negev</affiliation>
+      <email>michael@codeworth.io</email>
+    </person>
+  </authors>
+  <references>
+    <reference doi="10.1038/sdata.2016.18">
+      Wilkinson et al., FAIR Data Principles Sci Data. 2016 Mar 15;3:160018.
+    </reference>
+    <reference url="https://www.force11.org/group/joint-declaration-data-citation-principles-final">
+      Data Citation Synthesis Group: Joint Declaration of Data Citation Principles. Martone M. (ed.) San Diego CA: FORCE11; 2014
+    </reference>
+    <reference url="https://www.datasealofapproval.org/en/information/requirements/">
+      Data Gold Seal of Approval
+    </reference>
+    <reference doi="10.6084/m9.figshare.1314859">
+      Bilder G, Lin J, Neylon C (2015) Principles for Open Scholarly Infrastructure-v1
+    </reference>
+    <reference url="https://www.dtls.nl/fair-data/fair-principles-explained/">
+      Dutch Tech center for Life Sciences: The FAIR Data Principles explained
+    </reference>
+    <reference url="https://zenodo.org/record/1475430#.XC9CDS10c1I">
+      Enabling FAIR Data repository decision tree
+    </reference>
+    <reference url="https://zenodo.org/record/1432515#.XC9CoC10c1I">
+      Enabling FAIR Data repository interview questions
+    </reference>
+    <reference url="https://drive.google.com/drive/folders/1_KSX81olaO8aH54H1mT7Cp2Dn78UdF_R?usp=sharing">
+      DANS FAIR Data project: FAIR Data in Practice: From FAIRytale to FAIR Enough
+    </reference>
+  </references>
+</policy-model>
