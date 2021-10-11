@@ -81,7 +81,7 @@ public class TranscriptDiffMaker extends RunMode {
         cfg.setClassForTemplateLoading(getClass(), "/");
         
         String diffName = String.format("diff-%s-%s.html", fileNameNoSuffix(files[0]), fileNameNoSuffix(files[1]) );
-        Path diffDest = files[1].resolveSibling(diffName);
+        Path diffDest = files[0].resolveSibling(diffName);
         o.println("Diff file: " + diffDest);
         try ( Writer ow = Files.newBufferedWriter(diffDest) ) {
             Template tpl = cfg.getTemplate("/diff-report.html");
