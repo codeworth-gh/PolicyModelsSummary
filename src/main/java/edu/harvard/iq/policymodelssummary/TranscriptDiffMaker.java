@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -120,24 +121,23 @@ public class TranscriptDiffMaker extends RunMode {
         Transcript b = res.getTranscript(B);
         
         // metadata compare
-        if ( a.getModelData().equals(b.getModelData()) ) {
-            res.add(new Message(Both, "Metadata is identical"));
-        } else {
+        if ( ! a.getModelData().equals(b.getModelData()) ) {
             if ( ! a.getModelData().id().equals(b.getModelData().id()) ) {
-                res.add(new Message(A, "ID: " + a.getModelData().id()));
-                res.add(new Message(B, "ID: " + b.getModelData().id()));
+                res.add(new Message("ID", a.getModelData().id(), b.getModelData().id()));
             }
             if ( a.getModelData().version() != b.getModelData().version() ) {
-                res.add(new Message(A, "Version: " + a.getModelData().version()));
-                res.add(new Message(B, "Version: " + b.getModelData().version()));
+                res.add(new Message("Version", 
+                    Integer.toString(a.getModelData().version()), 
+                    Integer.toString(b.getModelData().version())));
             }
             if ( ! a.getModelData().localization().equals(b.getModelData().localization()) ) {
-                res.add(new Message(A, "Localization: " + a.getModelData().localization()));
-                res.add(new Message(B, "Localization: " + b.getModelData().localization()));
+                res.add(new Message("Localization", a.getModelData().localization(), b.getModelData().localization()));
             }
             if ( ! a.getModelData().time().equals(b.getModelData().time()) ) {
-                res.add(new Message(A, "Time: " + a.getModelData().time()));
-                res.add(new Message(B, "Time: " + b.getModelData().time()));
+                var fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+                res.add(new Message("Time",
+                    a.getModelData().time().format(fmt),
+                    b.getModelData().time().format(fmt)));
             }
         }
         

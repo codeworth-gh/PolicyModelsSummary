@@ -118,6 +118,10 @@ td {
 th {
     font-weight: bold;
     padding: 0.5em;
+    background-color: #CCC;
+}
+
+tr:nth-child(even){
     background-color: #EEE;
 }
 

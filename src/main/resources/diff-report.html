@@ -2,33 +2,47 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Interview Transcript Diff</title>
+        <title>${diff.model.metadata.title} Results: ${fileNameA} vs. ${fileNameB}</title>
         <style>
             <#include "css-report.css">
         </style>
     </head>
     <body>
-        <h1>Diff: ${diff.model.metadata.title}</h1>
+        <h1>${diff.model.metadata.title} Results: <span class="A">${fileNameA}</span> vs. <span class="B">${fileNameB}</span></h1>
         
-        <h2>Metadata</h2>
         <ul class="metadata">
             <li>Created: <em>${time}</em></li>
-            <li>Model: <em>${modelFile}</em></li>
+            <li>Model: <code>${modelFile}</code></li>
             <li>Transcripts:
                 <ul>
-                    <li class="a">A: ${fileA}</li>
-                    <li class="b">B: ${fileB}</li>
+                    <li class="a">A: <code>${fileA}</code></li>
+                    <li class="b">B: <code>${fileB}</code></li>
                 </ul>
             </li>
         </ul>
         
         <#if diff.hasMessages >
-            <h2>Messages</h2>
-            <ul>
-                <#list diff.messages as msg>
-                <li class="${msg.subject()}">${msg.subject()}: ${msg.message()}</li>
-                </#list>
-            </ul>
+            <h2>Metadata</h2>
+            <table class="data-cells">
+                <thead>
+                    <tr>
+                        <th>Coordinate</th>
+                        <th class="A">A: ${fileNameA}</th>
+                        <th class="B">B: ${fileNameB}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <#list diff.messages as diff>
+                        <tr>
+                            <td>${diff.message()}</td>
+                            <td class="A">${diff.valueA()}</td>
+                            <td class="B"> ${diff.valueB()}</td>
+                        </tr>
+                    </#list>
+                </tbody>
+            </table>
+        <#else>
+            <div class="identical">Metadata is identical.</div>
         </#if>
         
         <h2>Coordinate Differences</h2>
@@ -46,8 +60,8 @@
                     <#list diff.coordinateDiffs as diff>
                     <tr>
                         <td>${diff.path()}</td>
-                        <td class="A">${diff.valueA().nameString()} (${diff.valueA().ordinal()})</td>
-                        <td class="B"> ${diff.valueB().nameString()} (${diff.valueB().ordinal()})</td>
+                        <td class="A">${diff.valueA().ordinal()}: ${diff.valueA().nameString()}</td>
+                        <td class="B">${diff.valueB().ordinal()}: ${diff.valueB().nameString()}</td>
                     </tr>
                 </#list>
                 </tbody>
@@ -76,8 +90,8 @@
                                 ${diff.qnaA().questionText?replace("\n","<br>")}
                             </details>
                         </td>
-                        <td class="A">${diff.qnaA().answerText} (${diff.qnaA().answerOrdinal})</td>
-                        <td class="B">${diff.qnaB().answerText} (${diff.qnaB().answerOrdinal})</td>
+                        <td class="A">${diff.qnaA().answerOrdinal}: ${diff.qnaA().answerText}</td>
+                        <td class="B">${diff.qnaB().answerOrdinal}: ${diff.qnaB().answerText}</td>
                     </tr>
                     </#list>
                 </tbody>
@@ -91,4 +105,4 @@
             Report created using PolicyModels Summary. <a href="https://github.com/michbarsinai/PolicyModelsSummary">https://github.com/michbarsinai/PolicyModelsSummary</a>
         </footer>
     </body>
-</html>
+</html> 

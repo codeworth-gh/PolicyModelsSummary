@@ -17,7 +17,7 @@ public class DiffResult {
         A, B, Both
     }
     
-    public record Message(Subject subject, String message ){};
+    public record Message(String message, String valueA, String valueB){};
     public record CoordinateDiff( String path, ExpandedSlotValue<?> valueA, ExpandedSlotValue<?> valueB ){};
     public record AnswerDiff( String id, SingleQandA qnaA, SingleQandA qnaB ){};
     
