@@ -87,11 +87,11 @@
                             <code>${diff.id()}</code>
                             <details>
                                 <summary>Question Text</summary>
-                                ${diff.qnaA().questionText?replace("\n","<br>")}
+                                <#if diff.qnaA()??>${diff.qnaA().questionText?replace("\n","<br>")}<#else>${diff.qnaB().questionText?replace("\n","<br>")}</#if>
                             </details>
                         </td>
-                        <td class="A">${diff.qnaA().answerOrdinal}: ${diff.qnaA().answerText}</td>
-                        <td class="B">${diff.qnaB().answerOrdinal}: ${diff.qnaB().answerText}</td>
+                        <td class="A"><#if diff.qnaA()??>${diff.qnaA().answerOrdinal}<#else>(null)</#if></td>
+                        <td class="B"><#if diff.qnaB()??>${diff.qnaB().answerOrdinal}<#else>(null)</#if></td>
                     </tr>
                     </#list>
                 </tbody>

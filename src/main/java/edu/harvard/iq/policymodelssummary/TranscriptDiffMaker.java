@@ -155,14 +155,14 @@ public class TranscriptDiffMaker extends RunMode {
                 if ( ! amb.isEmpty() ) {
                     var ambl = new ArrayList<>(amb);
                     Collections.sort(ambl);
-                    res.add(new Message(A, "Slots in A and not in B: " + ambl.stream().collect(joining(", "))));
+                    res.add(new Message("Slots in A and not in B", ambl.stream().collect(joining(", ")), ""));
                 }
                 var bma = new TreeSet<>(slotsB);
                 bma.removeAll(slotsA);
                 if ( ! bma.isEmpty() ) {
                     var bmal = new ArrayList<>(bma);
                     Collections.sort(bmal);
-                    res.add(new Message(B, "Slots in B and not in A: " + bmal.stream().collect(joining(", "))));
+                    res.add(new Message("Slots in B and not in A", "", bmal.stream().collect(joining(", "))));
                 }
             }
             
