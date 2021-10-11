@@ -1,4 +1,13 @@
 <html>
+    <#macro note qna>
+        <#if qna??>
+            <#if qna.note.present>
+            <details>
+                <summary>Note</summary>${qna.note.get()?replace("\n","<br>")}
+            </details>
+            </#if>
+        </#if>
+    </#macro>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,7 +35,7 @@
             <table class="data-cells">
                 <thead>
                     <tr>
-                        <th>Coordinate</th>
+                        <th>Subject</th>
                         <th class="A">A: ${fileNameA}</th>
                         <th class="B">B: ${fileNameB}</th>
                     </tr>
@@ -36,7 +45,7 @@
                         <tr>
                             <td>${diff.message()}</td>
                             <td class="A">${diff.valueA()}</td>
-                            <td class="B"> ${diff.valueB()}</td>
+                            <td class="B">${diff.valueB()}</td>
                         </tr>
                     </#list>
                 </tbody>
@@ -90,8 +99,8 @@
                                 <#if diff.qnaA()??>${diff.qnaA().questionText?replace("\n","<br>")}<#else>${diff.qnaB().questionText?replace("\n","<br>")}</#if>
                             </details>
                         </td>
-                        <td class="A"><#if diff.qnaA()??>${diff.qnaA().answerOrdinal}<#else>(null)</#if></td>
-                        <td class="B"><#if diff.qnaB()??>${diff.qnaB().answerOrdinal}<#else>(null)</#if></td>
+                        <td class="A"><#if diff.qnaA()??>${diff.qnaA().answerOrdinal}: ${diff.qnaA().answerText} <@note qna=diff.qnaA() /> <#else><span class="null">null</span></#if></td>
+                        <td class="B"><#if diff.qnaB()??>${diff.qnaB().answerOrdinal}: ${diff.qnaB().answerText} <@note qna=diff.qnaB() /> <#else><span class="null">null</span></#if></td>
                     </tr>
                     </#list>
                 </tbody>

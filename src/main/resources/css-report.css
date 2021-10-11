@@ -144,6 +144,15 @@ summary {
     color: #008;
 }
 
+.null {
+    color: white;
+    background-color: #AAA;
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 0.7em;
+    vertical-align: text-bottom;
+}
+
 .identical {
     background-color: #AFA;
     padding: 1em;
