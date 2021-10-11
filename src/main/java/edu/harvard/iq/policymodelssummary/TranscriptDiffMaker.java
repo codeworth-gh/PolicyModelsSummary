@@ -79,13 +79,18 @@ public class TranscriptDiffMaker extends RunMode {
         cfg.setFallbackOnNullLoopVariable(false);
         cfg.setClassForTemplateLoading(getClass(), "/");
         
-        try ( Writer ow = Files.newBufferedWriter(files[1].resolveSibling("diff.html")) ) {
+        String diffName = String.format("diff-%s-%s.html", fileNameNoSuffix(files[0]), fileNameNoSuffix(files[1]) );
+        Path diffDest = files[1].resolveSibling(diffName);
+        o.println("Diff file: " + diffDest);
+        try ( Writer ow = Files.newBufferedWriter(diffDest) ) {
             Template tpl = cfg.getTemplate("/diff-report.html");
             Map<String,Object> data = new HashMap<>();
             data.put("diff", diff);
             data.put("time", LocalDateTime.now());
             data.put("fileA", files[0]);
             data.put("fileB", files[1]);
+            data.put("fileNameA", fileNameNoSuffix(files[0]));
+            data.put("fileNameB", fileNameNoSuffix(files[1]));
             data.put("modelFile", modelPath);
             System.out.println("modelPath = " + modelPath);
             tpl.process(data, ow);
@@ -198,5 +203,13 @@ public class TranscriptDiffMaker extends RunMode {
             });
         
         return res;
+    }
+    
+    String fileNameNoSuffix(Path p ) {
+        String r = p.getFileName().toString();
+        if ( r.toLowerCase().endsWith(".xml") ){
+            r = r.substring(0,r.length()-4);
+        }
+        return r;
     }
 }

@@ -29,25 +29,63 @@
                 <li class="${msg.subject()}">${msg.subject()}: ${msg.message()}</li>
                 </#list>
             </ul>
-
         </#if>
         
         <h2>Coordinate Differences</h2>
         
         <#if diff.hasCoordinateDiffs>
-
-            <ul>
-            <#list diff.coordinateDiffs as diff>
-                <li>
-                    ${diff.path()}: <code class="A">A: ${diff.valueA().nameString()} (${diff.valueA().ordinal()})</code> vs. <code class="B">B: ${diff.valueB().nameString()} (${diff.valueB().ordinal()})</code>
-                </li>
-            </#list>
-            </ul>
+            <table class="data-cells">
+                <thead>
+                    <tr>
+                        <th>Coordinate</th>
+                        <th class="A">A: ${fileNameA}</th>
+                        <th class="B">B: ${fileNameB}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <#list diff.coordinateDiffs as diff>
+                    <tr>
+                        <td>${diff.path()}</td>
+                        <td class="A">${diff.valueA().nameString()} (${diff.valueA().ordinal()})</td>
+                        <td class="B"> ${diff.valueB().nameString()} (${diff.valueB().ordinal()})</td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
         <#else>
             <div class="identical">Both interviews arrived at the same coordinate.</div>
         </#if>
         
         <h2>Answer Differences</h2>
+        <#if diff.hasAnswerDiffs>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th class="A">A: ${fileNameA}</th>
+                        <th class="B">B: ${fileNameB}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <#list diff.answerDiffs as diff>
+                    <tr>
+                        <td>
+                            <code>${diff.id()}</code>
+                            <details>
+                                <summary>Question Text</summary>
+                                ${diff.qnaA().questionText?replace("\n","<br>")}
+                            </details>
+                        </td>
+                        <td class="A">${diff.qnaA().answerText} (${diff.qnaA().answerOrdinal})</td>
+                        <td class="B">${diff.qnaB().answerText} (${diff.qnaB().answerOrdinal})</td>
+                    </tr>
+                    </#list>
+                </tbody>
+            </table>
+        <#else>
+            <div class="identical">Interviews have the same answers (notes might differ)</div>
+        </#if>
+        
         
         <footer>
             Report created using PolicyModels Summary. <a href="https://github.com/michbarsinai/PolicyModelsSummary">https://github.com/michbarsinai/PolicyModelsSummary</a>
