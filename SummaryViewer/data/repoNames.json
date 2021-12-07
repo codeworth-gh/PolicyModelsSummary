@@ -1,34 +1,90 @@
 {
-    "MetabolomicsWorkbench": {
-        "title": "MWB",
-        "id": "MetabolomicsWorkbench"
-    },
-    "AMP-T2D": {
-        "title": "AMP-T2D",
-        "id": "AMP-T2D"
-    },
-    "NIHFigshare": {
-        "title": "NIH Fg",
-        "id": "NIHFigshare"
-    },
-    "MassIVE": {
-        "title": "MassIVE",
-        "id": "MassIVE"
-    },
-    "CIL": {
-        "title": "CIL",
-        "id": "CIL"
-    },
-    "Zenodo": {
-        "title":"Zenodo",
-        "id":"Zenodo"
-    },
-    "FlCy": {
-        "title": "Flow Cy",
-        "id":"FlCy"
-    },
-    "IDR": {
-        "title": "IDR",
-        "id":"IDR"
-    }
+  "AMPT2D":{
+    "id":"AMPT2D",
+    "title":"Accelerating Medicines Partnership Type 2 Diabetes Knowledge Portal (AMP-T2D)" 
+  },
+  "ArEx":{
+    "id":"ArEx",
+    "title":"ArrayExpress" 
+  },
+  "TCIA":{
+    "id":"TCIA",
+    "title":"Cancer Imaging Archive (TCIA)" 
+  },
+  "CIL":{
+    "id":"CIL",
+    "title":"Cell Image Library (CIL)" 
+  },
+  "COD":{
+    "id":"COD",
+    "title":"Crystallography Open Database (COD)" 
+  },
+  "DDR":{
+    "id":"DDR",
+    "title":"Dryad Digital Repository" 
+  },
+  "MSDEBI":{
+    "id":"MSDEBI",
+    "title":"Electron Microscopy Data Bank at PDBe (MSD-EBI)" 
+  },
+  "FLOW":{
+    "id":"FLOW",
+    "title":"FLOWRepository" 
+  },
+  "FigS":{
+    "id":"FigS",
+    "title":"FigShare" 
+  },
+  "FlBs":{
+    "id":"FlBs",
+    "title":"FlyBase" 
+  },
+  "GEO":{
+    "id":"GEO",
+    "title":"Gene Expression Omnibus (GEO)" 
+  },
+  "MassIVE":{
+    "id":"MassIVE",
+    "title":"Mass spectrometry Interactive Virtual Environment (MassIVE)" 
+  },
+  "MetWB":{
+    "id":"MetWB",
+    "title":"Metabolomics Workbench (MetWB)" 
+  },
+  "MGI":{
+    "id":"MGI",
+    "title":"Mouse Genome Informatics (MGI)" 
+  },
+  "NIR":{
+    "id":"NIR",
+    "title":"NIDDK Central Repository" 
+  },
+  "NIDA":{
+    "id":"NIDA",
+    "title":"NIMH Data Archive" 
+  },
+  "PhNt":{
+    "id":"PhNt",
+    "title":"PhysioNet" 
+  },
+  "PrXc":{
+    "id":"PrXc",
+    "title":"ProteomeXchange" 
+  },
+  "ImmPort":{
+    "id":"ImmPort",
+    "title":"The Immunology Database and Analysis Portal (ImmPort)" 
+  },
+  "wwPDB":{
+    "id":"wwPDB",
+    "title":"Worldwide Protein Data Bank (wwPDB)" 
+  },
+  "ZND":{
+    "id":"ZND",
+    "title":"ZENODO" 
+  },
+  "ZFIN":{
+    "id":"ZFIN",
+    "title":"Zebrafish Information Network (ZFIN)" 
+  }
 }

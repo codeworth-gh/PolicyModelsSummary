@@ -1,0 +1,34 @@
+{
+    "MetabolomicsWorkbench": {
+        "title": "MWB",
+        "id": "MetabolomicsWorkbench"
+    },
+    "AMP-T2D": {
+        "title": "AMP-T2D",
+        "id": "AMP-T2D"
+    },
+    "NIHFigshare": {
+        "title": "NIH Fg",
+        "id": "NIHFigshare"
+    },
+    "MassIVE": {
+        "title": "MassIVE",
+        "id": "MassIVE"
+    },
+    "CIL": {
+        "title": "CIL",
+        "id": "CIL"
+    },
+    "Zenodo": {
+        "title":"Zenodo",
+        "id":"Zenodo"
+    },
+    "FlCy": {
+        "title": "Flow Cy",
+        "id":"FlCy"
+    },
+    "IDR": {
+        "title": "IDR",
+        "id":"IDR"
+    }
+}

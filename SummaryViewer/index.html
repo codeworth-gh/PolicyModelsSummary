@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -71,11 +72,19 @@
                         <input class="d-none" autocomplete="off" name="selectSize" readonly="readonly" aria-hidden="true" type="text" value=""/>
                     </div> 
                 </div>
-                <div>
+                <!-- <div>
                     <div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" onchange="toggleTitles()" autocomplete="off" id="swtchDisplayTitles" checked>
                         <label class="custom-control-label" style="width: auto" for="swtchDisplayTitles">Display titles</label>
-                      </div>
+                    </div>
+                </div> -->
+                <div>
+                    <label for="sltDpText">Datapoint Text</label>
+                    <select id="sltDpText" onchange="updateDatapointTitle(this.value)" class="form-select">
+                        <option value="title" selected>Title</option>
+                        <option value="id">Id</option>
+                        <option value="none">None</option>
+                    </select>
                 </div>
 
                 <hr>

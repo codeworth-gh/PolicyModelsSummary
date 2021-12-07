@@ -102,7 +102,11 @@ function makeCoordinateGetter( crdStr ) {
     const crd = crdStr.split("/");
     return function( value ) {
         for ( let x=0; x<crd.length; x++ ) {
-            value = value[crd[x]];
+            if ( crd[x] && value[crd[x]] ) {
+                value = value[crd[x]];
+            } else {
+                return -1000;
+            }
         }
         return value;
     }
@@ -213,15 +217,17 @@ function updateAxis(axisName) {
     const crdEmt = document.getElementById(axisName + "Crds");
     Utils.clear(crdEmt);
     let crdValues = dim2coords[menus[axisName].value];
-    if ( axisName === "y" ) {
-        crdValues = crdValues.slice();
-        crdValues.reverse();
+    if ( crdValues ) {
+        if ( axisName === "y" ) {
+            crdValues = crdValues.slice();
+            crdValues.reverse();
+        }
+        crdValues.forEach( v => {
+            const emt = document.createElement("li");
+            emt.innerText = v.replaceAll(/([A-Z])/g, " $1");
+            crdEmt.append(emt);
+        });
     }
-    crdValues.forEach( v => {
-        const emt = document.createElement("li");
-        emt.innerText = v.replaceAll(/([A-Z])/g, " $1");
-        crdEmt.append(emt);
-    })
 }
 
 function updateColorScale() {
@@ -426,8 +432,8 @@ function start() {
         document.getElementById("config-footer").innerHTML=config.footer;
 
         return loadData();
-    })
-    .then( ()=>{
+
+    }).then( ()=>{
         Object.keys(menus).forEach(k =>{
             const id = menus[k].emt.id;
             const defaultValue = config.axes[k];
@@ -469,4 +475,18 @@ function toggleTitles() {
     $("g text").css("opacity", opc);
 
     isTitlesShown = !isTitlesShown;
+}
+
+function updateDatapointTitle(modeName) {
+    switch (modeName) {
+        case "none":
+            vizEmts.dataPoints.selectAll("g").data(nodes, n=>n.data.id).select("text").text("");
+            break;
+        case "title":
+            vizEmts.dataPoints.selectAll("g").data(nodes, n=>n.data.id).select("text").text(d=>id2Title[d.data.id].title);
+            break;
+        case "id":
+            vizEmts.dataPoints.selectAll("g").data(nodes, n=>n.data.id).select("text").text(d=>d.data.id);
+            break;
+    }
 }
