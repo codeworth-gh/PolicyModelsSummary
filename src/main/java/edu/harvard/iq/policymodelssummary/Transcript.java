@@ -1,6 +1,7 @@
 package edu.harvard.iq.policymodelssummary;
 
 import edu.harvard.iq.policymodels.model.policyspace.values.CompoundValue;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,6 +98,7 @@ public class Transcript {
     private final Map<String, SingleQandA> answerMap = new HashMap<>();
     private CompoundValue coordinate;
     private ModelData modelData;
+    private Path transcriptFile;
     
     public void append( SingleQandA sa ) {
         answerSeq.add(sa);
@@ -159,6 +161,14 @@ public class Transcript {
     
     public CompoundValue getCoordinate() {
         return coordinate;
+    }
+
+    public Path getTranscriptFile() {
+        return transcriptFile;
+    }
+
+    public void setTranscriptFile(Path transcriptFile) {
+        this.transcriptFile = transcriptFile;
     }
     
     @Override

@@ -173,3 +173,64 @@ table.data-cells td {
              "Droid Sans Mono", 
              "Courier New", monospace;   
 }
+
+span.expSlotVal {
+    font-family: ui-monospace, 
+             "SF Mono", Menlo, Monaco, 
+             "Cascadia Mono", "Segoe UI Mono", 
+             "Roboto Mono", 
+             "Oxygen Mono", 
+             "Ubuntu Monospace", 
+             "Source Code Pro",
+             "Fira Mono", 
+             "Droid Sans Mono", 
+             "Courier New", monospace;
+    font-size: 10pt;
+    border-radius: 4px;
+    padding: 4px;
+    border: 1px solid black;
+}
+
+span.required {
+    color: #44A;
+    border-color: #44A;
+    background-color: #CCF;
+    padding: 4px 4px 4px 8px;
+    border-radius: 8px 0 0 8px;
+    
+}
+
+span.actual {
+    color: #A44;
+    border-color: #A44;
+    background-color: #FCC;
+    padding: 4px 8px 4px 4px;
+    border-radius: 0 8px 8px 0;
+}
+
+span.path {
+        font-family: ui-monospace, 
+             "SF Mono", Menlo, Monaco, 
+             "Cascadia Mono", "Segoe UI Mono", 
+             "Roboto Mono", 
+             "Oxygen Mono", 
+             "Ubuntu Monospace", 
+             "Source Code Pro",
+             "Fira Mono", 
+             "Droid Sans Mono", 
+             "Courier New", monospace;
+    font-size: 10pt;        
+}
+
+ol.reasons li {
+    margin: .7em 0;
+    padding: 8px;
+    border-radius: 8px 0 0 8px;
+    background-color: #EEE;
+}
+
+span.mainFilename {
+    font-weight: bold;
+    color: #440;
+}
+

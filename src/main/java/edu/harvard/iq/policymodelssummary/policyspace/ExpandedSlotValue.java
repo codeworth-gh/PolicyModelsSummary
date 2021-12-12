@@ -105,7 +105,14 @@ public abstract class ExpandedSlotValue<T> {
     };
     
     public static ExpandedSlotValue<?> lookup( CompoundValue root, String path ) {
+        return lookup(root, path, false);
+    }
+    
+    public static ExpandedSlotValue<?> lookup( CompoundValue root, String path, boolean skipRoot ) {
         String[] comps = path.split("/");
+        if ( skipRoot ) {
+            comps = Arrays.copyOfRange(comps, 1, comps.length);
+        }
         return lookup(root, Arrays.asList(comps) );
     }
     
@@ -163,6 +170,6 @@ public abstract class ExpandedSlotValue<T> {
     
     @Override
     public String toString(){
-        return "[ExpandedSlotValue: " + nameString() + "]";
+        return "[ExpandedSlotValue: " + nameString() + " " + ordinal() + "]";
     }
 }

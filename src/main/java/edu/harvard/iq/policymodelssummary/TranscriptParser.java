@@ -62,6 +62,7 @@ public class TranscriptParser implements ContentHandler {
             rdr.parse( new InputSource(fileRdr));        
         }
         result.setModelData(modelData);
+        result.setTranscriptFile(transcriptFile);
         return result;
     }
 

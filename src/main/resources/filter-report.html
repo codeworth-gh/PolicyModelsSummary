@@ -1,0 +1,67 @@
+<html>
+    <#macro lookupValue value class>
+        <span class="expSlotVal ${class}">${class} <#if value.ordinal() == -1>(n/a)<#else>${value.nameString()}(${value.ordinal()})</#if></span>
+    </#macro>
+    <#macro thresholdFile><span class="mainFilename">${result.threshold().name}</span></#macro>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Possible Repositories for storing ${result.threshold().name}</title>
+        <style>
+            <#include "css-report.css">
+        </style>
+    </head>
+    <body>
+        <h1>Possible Repositories for storing <@thresholdFile/></h1>
+        
+        <ul class="metadata">
+            <li>Created: <em>${time}</em></li>
+            <li>Model: <code>${modelPath}</code></li>
+            <li>Transcripts:
+                <ul>
+                    <li>Threshold: <code>${result.threshold().transcriptFile}</code></li>
+                    <li>Repositories: <code>${reposPath}</code></li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h2>Supporting Repositories</h2>
+        <#if result.hasAccepted>
+            <p>These repositories meet or exceed the handling/storage requirements for <@thresholdFile/></p>
+            <ul>
+                <#list result.acceptedList() as ts>
+                    <li>${ts.name}</li>
+                </#list>
+            </ul>
+        <#else>
+            <p>None of the surveyed repositories support the requirement for storing/handling <@thresholdFile/>.</p>
+        </#if>
+        
+        
+        <h2>Non-Supporting Repositories</h2>
+        <#if result.hasRejected>
+            <p>The following repositories do not support storing <@thresholdFile/>:</p>
+            <ul>
+                <#list result.refusedKeys() as ts>
+                <li>
+                    <em>${ts}</em>
+                    <ol class="reasons">
+                        <#list result.explain(ts) as reason>
+                        <li>
+                            <span class="path">${reason.path()}</span> <@lookupValue value=reason.threshold() class="required"/><@lookupValue value=reason.actual() class="actual"/>
+                        </li>
+                        </#list>
+                    </ol>
+                </li>
+                </#list>
+            </ul>
+
+        <#else>
+            <p>All the surveyed repositories support storing ${result.threshold().name}</p>
+        </#if>
+        
+        <footer>
+            Report created using PolicyModels Summary. <a href="https://github.com/codeworth-gh/PolicyModelsSummary">https://github.com/codeworth-gh/PolicyModelsSummary</a>
+        </footer>
+    </body>
+</html> 
