@@ -74,6 +74,11 @@ svg#viz {
 #viz g.repo circle {
   fill: #DDDDDD;
 }
+#viz g.repo circle.hovered {
+  fill: #FFFF00;
+  stroke: #FF0;
+  stroke-width: 4px;
+}
 #viz g.repo text {
   font: 10pt normal sans-serif;
   pointer-events: none;

@@ -94,6 +94,11 @@ svg#viz {
 #viz g.repo {
     circle {
         fill: #DDDDDD;
+        &.hovered {
+            fill: #FFFF00;
+            stroke: #FF0;
+            stroke-width: 4px;
+        }
     }
 
     text {

@@ -1,90 +1,320 @@
-{
-  "AMPT2D":{
-    "id":"AMPT2D",
-    "title":"Accelerating Medicines Partnership Type 2 Diabetes Knowledge Portal (AMP-T2D)" 
-  },
-  "ArEx":{
-    "id":"ArEx",
-    "title":"ArrayExpress" 
-  },
-  "TCIA":{
-    "id":"TCIA",
-    "title":"Cancer Imaging Archive (TCIA)" 
-  },
-  "CIL":{
-    "id":"CIL",
-    "title":"Cell Image Library (CIL)" 
-  },
-  "COD":{
-    "id":"COD",
-    "title":"Crystallography Open Database (COD)" 
-  },
-  "DDR":{
-    "id":"DDR",
-    "title":"Dryad Digital Repository" 
-  },
-  "MSDEBI":{
-    "id":"MSDEBI",
-    "title":"Electron Microscopy Data Bank at PDBe (MSD-EBI)" 
-  },
-  "FLOW":{
-    "id":"FLOW",
-    "title":"FLOWRepository" 
-  },
-  "FigS":{
-    "id":"FigS",
-    "title":"FigShare" 
-  },
-  "FlBs":{
-    "id":"FlBs",
-    "title":"FlyBase" 
-  },
-  "GEO":{
-    "id":"GEO",
-    "title":"Gene Expression Omnibus (GEO)" 
-  },
-  "MassIVE":{
-    "id":"MassIVE",
-    "title":"Mass spectrometry Interactive Virtual Environment (MassIVE)" 
-  },
-  "MetWB":{
-    "id":"MetWB",
-    "title":"Metabolomics Workbench (MetWB)" 
-  },
-  "MGI":{
-    "id":"MGI",
-    "title":"Mouse Genome Informatics (MGI)" 
-  },
-  "NIR":{
-    "id":"NIR",
-    "title":"NIDDK Central Repository" 
-  },
-  "NIDA":{
-    "id":"NIDA",
-    "title":"NIMH Data Archive" 
-  },
-  "PhNt":{
-    "id":"PhNt",
-    "title":"PhysioNet" 
-  },
-  "PrXc":{
-    "id":"PrXc",
-    "title":"ProteomeXchange" 
-  },
-  "ImmPort":{
-    "id":"ImmPort",
-    "title":"The Immunology Database and Analysis Portal (ImmPort)" 
-  },
-  "wwPDB":{
-    "id":"wwPDB",
-    "title":"Worldwide Protein Data Bank (wwPDB)" 
-  },
-  "ZND":{
-    "id":"ZND",
-    "title":"ZENODO" 
-  },
-  "ZFIN":{
-    "id":"ZFIN",
-    "title":"Zebrafish Information Network (ZFIN)" 
-  }
-}
+{"61b3966dde82e": {
+     "title": "Open Science Framework",
+     "id": "OSF"
+ }
+,"61b38d900de6a": {
+     "title": "1000 Functional Connectomes Project",
+     "id": "FCP"
+ }
+,"61b26393d0bdb": {
+     "title": "FigsharePlus",
+     "id": "FP"
+ }
+,"61b25727446b0": {
+     "title": "Analysis, Visualization, and Informatics Lab-space",
+     "id": "AnVIL"
+ }
+,"61b2356fd0da7": {
+     "title": "Inorganic Crystal Structure Database",
+     "id": "ICSD"
+ }
+,"61afe1bc20b2b": {
+     "title": "Protein Circular Dichroism Data Bank",
+     "id": "PCDDB"
+ }
+,"61afbe71c6643": {
+     "title": "European Variation Archive",
+     "id": "EVA"
+ }
+,"61ae86258c270": {
+     "title": "Kinetic Models of Biological Systems",
+     "id": "KiMoSys"
+ }
+,"61ae7b82bec16": {
+     "title": "STRENDA",
+     "id": "STRENDA"
+ }
+,"61ae4f12d113f": {
+     "title": "Image Data Resource",
+     "id": "IDR"
+ }
+,"61aa8d0ee4e26": {
+     "title": "SICAS Medical Image Repository",
+     "id": "SICASMIR"
+ }
+,"61aa579266f9c": {
+     "title": "MGnify",
+     "id": "MG"
+ }
+,"61a9297ab439f": {
+     "title": "Mendeley Data",
+     "id": "MD"
+ }
+,"61a9171c4bc51": {
+     "title": "Coherent X-Ray Imaging Data Bank",
+     "id": "CXIDB"
+ }
+,"61a9088e0473a": {
+     "title": "Cambridge Crystallographic Data Centre",
+     "id": "CCDC"
+ }
+,"61a7e807dba71": {
+     "title": "MetaboLights",
+     "id": "ML"
+ }
+,"61a7d367c0770": {
+     "title": "ChEMBL",
+     "id": "CEMBL"
+ }
+,"61a7b7e1b702c": {
+     "title": "Cancer Nanotechnology Laboratory",
+     "id": "caNanoLab"
+ }
+,"61a67ea0d035e": {
+     "title": "GenomeRNAi",
+     "id": "GRNA"
+ }
+,"61a67792d7cae": {
+     "title": "NCBI Assembly Archive Viewer",
+     "id": "NCBIAAV"
+ }
+,"61a66c46bf63e": {
+     "title": "Research Collaboratory for Structural Bioinformatics Protein Data Bank",
+     "id": "RCSB PDB"
+ }
+,"61a50edd51b77": {
+     "title": "The Immunology Database and Analysis Portal",
+     "id": "ImmPort"
+ }
+,"619c32ba6e32b": {
+     "title": "PubChem BioAssay",
+     "id": "PCBA"
+ }
+,"619c189ff2a15": {
+     "title": "Cancer Imaging Archive",
+     "id": "TCIA"
+ }
+,"6198635f7a0e6": {
+     "title": "PDBj - Protein Data Bank Japan",
+     "id": "PDBPDBJ"
+ }
+,"619855cdf252b": {
+     "title": "Biological General Repository for Interaction Datasets",
+     "id": "BioGRID"
+ }
+,"61983144ed7d5": {
+     "title": "PhysioNet",
+     "id": "PN"
+ }
+,"61980ddc919a0": {
+     "title": "IntAct",
+     "id": "IA"
+ }
+,"619440196209e": {
+     "title": "PeptideAtlas",
+     "id": "PA"
+ }
+,"6194372d6bb96": {
+     "title": "Influenza Research Database",
+     "id": "IRD"
+ }
+,"619425a9727a7": {
+     "title": "Global Proteome Machine Database",
+     "id": "GPM DB"
+ }
+,"61941b83b6133": {
+     "title": "Worldwide Protein Data Bank",
+     "id": "wwPDB"
+ }
+,"618eaa21a0564": {
+     "title": "FlyBase",
+     "id": "FB"
+ }
+,"618e946382942": {
+     "title": "NIDDK Central Repository",
+     "id": "NIDDKCR"
+ }
+,"618b0e11d745c": {
+     "title": "European Nucleotide Archive",
+     "id": "ENA"
+ }
+,"618b03f590135": {
+     "title": "Electron Microscopy Data Bank at PDBe",
+     "id": "MSD-EBI"
+ }
+,"618af98b39720": {
+     "title": "Mouse Genome Informatics",
+     "id": "MGI"
+ }
+,"618af15d68116": {
+     "title": "Dryad Digital Repository",
+     "id": "DDR"
+ }
+,"618ac64660c82": {
+     "title": "Crystallography Open Database",
+     "id": "COD"
+ }
+,"618ab19899b69": {
+     "title": "OpenNeuro",
+     "id": "ON"
+ }
+,"6189537d1a4ec": {
+     "title": "Gene Expression Omnibus",
+     "id": "GEO"
+ }
+,"6187717eaa7b2": {
+     "title": "European Genome phenome Archive",
+     "id": "EGA"
+ }
+,"618563e3821c2": {
+     "title": "Database of Genomic Variants Archive",
+     "id": "DGVa"
+ }
+,"6183016f8dc5b": {
+     "title": "NCBI Sequence Read Archive",
+     "id": "SRA"
+ }
+,"6182f50c70005": {
+     "title": "PubChem Substance",
+     "id": "PCS"
+ }
+,"6182dc5607fe7": {
+     "title": "NIMH Data Archive",
+     "id": "NIMHDA"
+ }
+,"61819416c02ac": {
+     "title": "UniProtKB",
+     "id": "UPKB"
+ }
+,"61818b3d0e2ea": {
+     "title": "FigShare",
+     "id": "FS"
+ }
+,"61818011c4f4c": {
+     "title": "PDBe - Protein Data Bank in Europe",
+     "id": "PDBPDBE"
+ }
+,"618169173a39c": {
+     "title": "ProteomeXchange",
+     "id": "PX"
+ }
+,"618063ccbdc33": {
+     "title": "618063ccbdc33",
+     "id": "SCR_003943"
+ }
+,"6180631e0deb3": {
+     "title": "Network Data Exchange",
+     "id": "NDEx"
+ }
+,"6180580202271": {
+     "title": "Structural Biology Grid",
+     "id": "SBG"
+ }
+,"618009bd3789a": {
+     "title": "Proteomics Identifications",
+     "id": "PRIDE"
+ }
+,"617c7686bf811": {
+     "title": "dbVar",
+     "id": "V"
+ }
+,"617afee95d0df": {
+     "title": "EMDataResource.org",
+     "id": "EMDR"
+ }
+,"617af27cbf803": {
+     "title": "Database of Interacting Proteins",
+     "id": "DIP"
+ }
+,"617acbeb92a09": {
+     "title": "miRBase",
+     "id": "RB"
+ }
+,"6179b959adabb": {
+     "title": "Japanese Genotype-phenotype Archive",
+     "id": "JGA"
+ }
+,"61799a43902aa": {
+     "title": "ArrayExpress",
+     "id": "AE"
+ }
+,"617864108327a": {
+     "title": "GenBank",
+     "id": "GB"
+ }
+,"61783dff71132": {
+     "title": "NCBI database of Genotypes and Phenotypes",
+     "id": "NCBIGP"
+ }
+,"61782a0f4e570": {
+     "title": "Zebrafish Information Network",
+     "id": "ZFIN"
+ }
+,"617742d14acc1": {
+     "title": "Universal Protein Resource",
+     "id": "UPR"
+ }
+,"6176dfa6ee87d": {
+     "title": "FLOWRepository",
+     "id": "FLOWR"
+ }
+,"6176c6b4dd317": {
+     "title": "Cell Image Library",
+     "id": "CIL"
+ }
+,"61735aa7d68c3": {
+     "title": "ZENODO",
+     "id": "ZENODO"
+ }
+,"61732cf671895": {
+     "title": "NIH Figshare",
+     "id": "NIHF"
+ }
+,"6171cf99205e8": {
+     "title": "Mass spectrometry Interactive Virtual Environment",
+     "id": "MassIVE"
+ }
+,"616f3cb72e148": {
+     "title": "Metabolomics Workbench",
+     "id": "MetWB"
+ }
+,"61686ff532d84": {
+     "title": "DNA DataBank of Japan",
+     "id": "DDBJ"
+ }
+,"61686ac4ad055": {
+     "title": "DNA DataBank of Japan",
+     "id": "DDBJ"
+ }
+,"616769a459812": {
+     "title": "dbSNP",
+     "id": "SNP"
+ }
+,"616710b6c03dd": {
+     "title": "ClinicalTrials.gov",
+     "id": "CT"
+ }
+,"6165b0f93475d": {
+     "title": "Biological Magnetic Resonance Data Bank",
+     "id": "BMRB"
+ }
+,"6164b707b77b7": {
+     "title": "Dataverse Network Project",
+     "id": "DNP"
+ }
+,"61609c4c0f5e7": {
+     "title": "NeuroMorpho.Org",
+     "id": "NMO"
+ }
+,"61605fb58afad": {
+     "title": "National Addiction and HIV Data Archive Program",
+     "id": "NAHDAP"
+ }
+,"615dc2fbd22e0": {
+     "title": "NIDDK Information Network",
+     "id": "dkNET"
+ }
+,"614b942a24e02": {
+     "title": "Accelerating Medicines Partnership Type 2 Diabetes Knowledge Portal",
+     "id": "AMP-T2D"
+ }}

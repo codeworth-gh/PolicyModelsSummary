@@ -4,9 +4,9 @@ const SIZES = {
         h: 600
     },
     dataPoint: {
-        min: 20,
-        max: 60,
-        default: 30
+        min: 10,
+        max: 50,
+        default: 20
     }
 };
 const COLORS = {
@@ -23,7 +23,8 @@ const VIEW_CRD = {
 
 let config;
 let space;
-const dataPoints ={};
+const dataPoints = {};
+let repoModal;
 const nodes = [];
 let id2Title;
 let simulation;
@@ -90,8 +91,8 @@ function loadData() {
             dataPoints[id].id = id;
             const node = {
                 data: dataPoints[id],
-                x:SIZES.grid.cx,
-                y:SIZES.grid.cy
+                x:(Math.random()*SIZES.grid.w),
+                y:SIZES.grid.h
             };
             nodes.push( node );
         });
@@ -370,21 +371,26 @@ function addDataPoints() {
         .append("g")
         .attr("id", BY_ID)
         .attr("class", "repo")
-        .attr("transform", d=>"translate(" + d.x + "," + d.y + ")");
+        .attr("transform", d=>"translate(" + d.x + "," + d.y + ")")
+        .on("mousedown", (e,d)=>showData(d.data.id))
+        .on("mouseover", (e,d)=>e.target.classList.add("hovered"))
+        .on("mouseout",  (e,d)=>e.target.classList.remove("hovered"));
 
-    dataPointGs.append("circle").attr("cx", 0).attr("cy", 0).attr("r", dataPointSize).style("fill", COLORS.default );
+    dataPointGs.append("circle").attr("cx", 0).attr("cy", 0)
+                .attr("r", dataPointSize).style("fill", COLORS.default );
     dataPointGs.append("text").attr("x", 0).attr("y", 0)
             .attr("text-anchor","middle").attr("dy","0.35em")
-            .text( resilientTitle );
+            .text( d=>resilientTitle(d, "id") );
+    
 }
 
-function resilientTitle( dataPoint ) {
+function resilientTitle( dataPoint, mode ) {
     const id = dataPoint.data.id;
     const repoNameData = id2Title[id];
-    if ( repoNameData && repoNameData.title ) {
-        return repoNameData.title;
+    if ( repoNameData && repoNameData[mode] ) {
+        return repoNameData[mode];
     } else {
-        console.log("Missing title for %o", dataPoint );
+        console.log("Missing "+mode+" for %o", dataPoint );
         return id;
     }
 }
@@ -483,10 +489,20 @@ function updateDatapointTitle(modeName) {
             vizEmts.dataPoints.selectAll("g").data(nodes, n=>n.data.id).select("text").text("");
             break;
         case "title":
-            vizEmts.dataPoints.selectAll("g").data(nodes, n=>n.data.id).select("text").text(d=>id2Title[d.data.id].title);
+            vizEmts.dataPoints.selectAll("g").data(nodes, n=>n.data.id).select("text").text(d=>resilientTitle(d,"title"));
             break;
         case "id":
-            vizEmts.dataPoints.selectAll("g").data(nodes, n=>n.data.id).select("text").text(d=>d.data.id);
+            vizEmts.dataPoints.selectAll("g").data(nodes, n=>n.data.id).select("text").text(d=>resilientTitle(d,"id"));
             break;
     }
+}
+
+function showData( id ) {
+    if ( ! repoModal ) {
+        repoModal = new bootstrap.Modal(document.getElementById('repoModal'));
+    }
+    const info = id2Title[id];
+    document.getElementById("repoIdField").textContent = info.id;
+    document.getElementById("repoTitleField").textContent = info.title;
+    repoModal.show();
 }

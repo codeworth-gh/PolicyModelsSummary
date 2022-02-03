@@ -127,5 +127,31 @@
                 start();
             });
         </script>
+        <div class="modal" tabindex="-1" id="repoModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Repository Info</h5>
+                  <button type="button" class="btn-close" aria-label="Close" onclick="repoModal.hide()">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <table class="table">
+                      <tr>
+                          <th>ID</th>
+                          <td id="repoIdField"></td>
+                      </tr>
+                      <tr>
+                          <th>Title</th>
+                          <td id="repoTitleField"></td>
+                      </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" onclick="repoModal.hide()">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
     </body>
 </html>

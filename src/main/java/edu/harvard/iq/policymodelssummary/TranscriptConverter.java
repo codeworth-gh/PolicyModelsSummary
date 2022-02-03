@@ -1,6 +1,5 @@
 package edu.harvard.iq.policymodelssummary;
 
-import edu.harvard.iq.policymodels.io.StringMapFormat;
 import edu.harvard.iq.policymodels.model.PolicyModel;
 import edu.harvard.iq.policymodels.model.decisiongraph.Answer;
 import edu.harvard.iq.policymodels.model.policyspace.values.AbstractValue;
@@ -9,8 +8,6 @@ import edu.harvard.iq.policymodels.model.policyspace.values.AtomicValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.CompoundValue;
 import edu.harvard.iq.policymodels.model.policyspace.values.ToDoValue;
 import edu.harvard.iq.policymodels.runtime.RuntimeEngine;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.ZoneOffset;
@@ -18,19 +15,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import static java.util.stream.Collectors.joining;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.jparsec.internal.util.Lists;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -39,21 +31,23 @@ import org.xml.sax.SAXException;
 public class TranscriptConverter extends RunMode {
     
     private final DocumentBuilderFactory bldFactory = DocumentBuilderFactory.newInstance();
-    private final DocumentBuilder docBuilder = bldFactory.newDocumentBuilder();
+    private final DocumentBuilder docBuilder;
     private final Path srcModelPath;
     private final Path dstModelPath;
     private final Path transcriptsPath;
     private final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-    private final Transformer transformer = transformerFactory.newTransformer();
+    private final Transformer transformer;
     private TranscriptParser tspParser;
     private RuntimeEngine modelRunner;
     
     
-    public TranscriptConverter(Path srcModelPath, Path dstModelPath, Path transcriptsPath) {
+    public TranscriptConverter(Path srcModelPath, Path dstModelPath, Path transcriptsPath) throws Exception {
         super("CONVERT");
         this.srcModelPath = srcModelPath;
         this.dstModelPath = dstModelPath;
         this.transcriptsPath = transcriptsPath;
+        docBuilder = bldFactory.newDocumentBuilder();
+        transformer = transformerFactory.newTransformer();
     }
     
     public void go() throws Exception {
