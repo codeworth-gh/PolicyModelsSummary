@@ -100,6 +100,9 @@ public class Transcript {
     private ModelData modelData;
     private Path transcriptFile;
     
+    /** Human-readable name */
+    private String hrName;
+    
     public void append( SingleQandA sa ) {
         answerSeq.add(sa);
         answerMap.put(sa.questionId, sa);
@@ -169,6 +172,18 @@ public class Transcript {
 
     public void setTranscriptFile(Path transcriptFile) {
         this.transcriptFile = transcriptFile;
+    }
+
+    public void setHrName(String hrName) {
+        this.hrName = hrName;
+    }
+    
+    /**
+     * Gets the HR name. If it is not present returns the original (file) name.
+     * @return 
+     */
+    public String getHrName() {
+        return (hrName!=null) ? hrName : getName();
     }
     
     @Override
