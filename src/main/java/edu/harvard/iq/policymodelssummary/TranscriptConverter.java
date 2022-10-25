@@ -96,6 +96,14 @@ public class TranscriptConverter extends RunMode {
         }
     }
     
+    public void writeTranscript( Transcript tspt, Path dest ) throws Exception {
+        var xml = createXml( tspt, tspt.getCoordinate() );
+        var ds = new DOMSource(xml);
+        try( var out = Files.newBufferedWriter(dest) ) {
+            transformer.transform(ds, new StreamResult(out) );            
+        }
+    }
+    
     private Element createXml( Transcript tspt, CompoundValue newRes ) {
         var doc = docBuilder.newDocument();
         Element model = doc.createElement("model");

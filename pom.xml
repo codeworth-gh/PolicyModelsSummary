@@ -49,6 +49,11 @@
             <artifactId>fastods</artifactId>
             <version>0.8.1</version>
         </dependency>
+        <dependency><!-- Reading ODS input -->
+            <groupId>com.github.miachm.sods</groupId>
+            <artifactId>SODS</artifactId>
+            <version>1.4.0</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>

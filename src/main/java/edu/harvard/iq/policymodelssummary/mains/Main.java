@@ -5,6 +5,7 @@ import edu.harvard.iq.policymodelssummary.FilterTranscripts;
 import edu.harvard.iq.policymodelssummary.SummarizeTranscripts;
 import edu.harvard.iq.policymodelssummary.TranscriptConverter;
 import edu.harvard.iq.policymodelssummary.TranscriptDiffMaker;
+import edu.harvard.iq.policymodelssummary.UpdateAnswers;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -19,12 +20,13 @@ public class Main {
         
         if ( args.length ==  0 ) {
             System.out.println("Usage: <verb> <params> ");
-            System.out.println("Where: verb is one of: summerize, diff, filter");
+            System.out.println("Where: verb is one of: summarize, summarize-answers, diff, filter, convert, update");
             System.out.println("example: summarize <path to model> <path to transcript folder>");
             System.out.println("example: summarize-answers <path to model> <path to transcript folder> [<path to human readable name CSV>]");
             System.out.println("example: diff <path to model> <path to transcript 1> <path to transcript 2>");
             System.out.println("example: filter <path to model> <path to transcript> <path to items directory>");
             System.out.println("example: convert <path to src model> <path to destination model> <path to items directory>");
+            System.out.println("example: update <path to src model> <path to ods file> <path to transcript directory>");
                 
             System.exit(-1);
         }
@@ -52,6 +54,8 @@ public class Main {
                 }
                     
                 case "convert" -> new TranscriptConverter(Paths.get(args[1]), Paths.get(args[2]), Paths.get(args[3])).go();
+                    
+                case "update" -> new UpdateAnswers().go(Paths.get(args[1]), Paths.get(args[3]), Paths.get(args[2]));
                     
                 default -> {
                     System.out.println("Unknown verb '" + args[0] + "'.");
