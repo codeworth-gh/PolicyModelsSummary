@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import java.util.stream.IntStream;
@@ -42,6 +43,7 @@ public class UpdateAnswers extends RunMode {
     private final Map<String, String> fileName2RepoName = new HashMap<>();
     private PolicyModel model;
     private Localization loc;
+    private Map<String,String> locAns2Ans;
     private Path transcriptFolder, resultFolder;
     
     public UpdateAnswers() {
@@ -71,6 +73,8 @@ public class UpdateAnswers extends RunMode {
             System.exit(-3);
         }
         
+        locAns2Ans = loc.getLocalizedAnswers().stream().collect( Collectors.toMap(k->loc.localizeAnswer(k), k->k));
+        
         o.println("\n\n READING correct answers");
         readCorrectedAnswers(anOds);
 
@@ -95,6 +99,8 @@ public class UpdateAnswers extends RunMode {
         TranscriptConverter xmlWriter = new TranscriptConverter(null,null,null);
         
         for ( String xscriptName : fileName2RepoName.keySet() ) {
+            
+            o.println("Re-answering " + xscriptName);
             // Re-Answer the questionnaire (if possible)
             Map<String,String> answers = correctedAnswers.get(xscriptName);
             RuntimeEngine ngn = new RuntimeEngine();
@@ -131,7 +137,7 @@ public class UpdateAnswers extends RunMode {
                     updatedXspt.append(sqa);
                 } else {
                     final String msg = xscriptName + ": Conversion failed, as there's no answer question: " + qId;
-                    o.println("!! " + msg);
+                    o.println("\n!! " + msg);
                     unconversibles.add(msg);
                     updateFail = true;
                 }
@@ -142,7 +148,7 @@ public class UpdateAnswers extends RunMode {
                 updatedXspt.setCoordinate(ngn.getCurrentValue());
                 Path outPath = resultFolder.resolve(xscriptName);
                 xmlWriter.writeTranscript(updatedXspt, outPath);
-                o.println(xscriptName + " corrected");
+                o.println(xscriptName + " done");
             }
         }
         return unconversibles;
@@ -169,7 +175,7 @@ public class UpdateAnswers extends RunMode {
             .mapToObj(rowNum -> dr.getCell(rowNum,0))
             .filter( v -> v != null )
             .map(    v -> v.getValue() )
-            .filter( v -> v != null )  // being super-caucious here
+            .filter( v -> v != null )  // being super-cautious here
             .map(    v -> v.toString() )
             .map(    v -> v.split(" ", 2)[0] ) // remove remarks to the id, added by Airtable.
             .collect( toList() );
@@ -183,30 +189,33 @@ public class UpdateAnswers extends RunMode {
         // Now do the answer maps.
         for ( int col=FIRST_REPO_COLUMN; col < fileName2RepoName.size()+FIRST_REPO_COLUMN; col++ ) {
             Map<String,String> correctedRepoAnswers = new HashMap<>();
-            final String repoName = dr.getCell(1, col).getValue().toString();
-            for ( int row=ANSWER_START_ROW; row<=ANSWER_END_ROW; row++ ){
-                var valueOpt = getValue( dr, row, col);
-                if ( valueOpt.isPresent() ) {
-                    String value = valueOpt.get().trim();
-                    if ( ! value.equals("-") ) { // "-" is used to mark blank answers
-                        String correctedAnswer = valueOpt.get();
-                        // Ignore no-text answers (the weird date-times)
-                        if ( atLeastOneLetter.matcher(correctedAnswer).matches() ) {
-                            // CONTPOINT: 
-                            // Convert from the text in localization to the answer in code
-                            correctedRepoAnswers.put(questionIds.get(row-ANSWER_START_ROW), valueOpt.get());
+            final Object repoNameValue = dr.getCell(1, col).getValue();
+            if ( repoNameValue != null ) {
+                final String repoName = dr.getCell(1, col).getValue().toString();
+                for ( int row=ANSWER_START_ROW; row<=ANSWER_END_ROW; row++ ){
+                    var valueOpt = getValue( dr, row, col);
+                    if ( valueOpt.isPresent() ) {
+                        String value = valueOpt.get().trim();
+                        if ( ! value.equals("-") ) { // "-" is used to mark blank answers
+                            String correctedAnswer = valueOpt.get();
+                            // Ignore no-text answers (the weird date-times)
+                            if ( atLeastOneLetter.matcher(correctedAnswer).matches() ) {
+                                // Convert from the text in localization to the answer in code
+                                correctedAnswer = locAns2Ans.getOrDefault(correctedAnswer, correctedAnswer);
+                                correctedRepoAnswers.put(questionIds.get(row-ANSWER_START_ROW), correctedAnswer);
+                            }
                         }
                     }
                 }
-            }
-            correctedAnswers.put(repoName, correctedRepoAnswers);
-            o.println("");
-            o.println(repoName + ":");
-            questionIds.stream()
-                .filter( qid -> correctedRepoAnswers.containsKey(qid) )
-                .forEach( qid -> o.println(" " + (qid + "                    ").substring(0,40) + correctedRepoAnswers.get(qid)))
-                ;
-        }
+                correctedAnswers.put(repoName, correctedRepoAnswers);
+                o.println("");
+                o.println(repoName + ":");
+                questionIds.stream()
+                    .filter( qid -> correctedRepoAnswers.containsKey(qid) )
+                    .forEach( qid -> o.println(" " + (qid + "                    ").substring(0,40) + correctedRepoAnswers.get(qid)))
+                    ;
+            } // reponame != null
+        } // for repo columns
         
     }
     

@@ -29,11 +29,15 @@ public class SummarizeTranscripts extends RunMode {
         Iterator<Path> transcripts = Files.newDirectoryStream(transcriptDir).iterator();
         while ( transcripts.hasNext() ) {
             Path tspt = transcripts.next();
-            o.print("Reading " + tspt.toAbsolutePath() + "...");
+            o.print("Reading " + tspt.getFileName() + " ...");
             if ( tspt.getFileName().toString().endsWith(".xml") ) {
                 o.print("parsing..");
-                smry.add(psr.parse(tspt));
-                o.println("OK");
+                try {
+                    smry.add(psr.parse(tspt));
+                    o.println("OK");
+                } catch ( Exception e ) {
+                    o.println("ERROR: " + e.getMessage());
+                }
             } else {
                 o.println("Ignored");
             }

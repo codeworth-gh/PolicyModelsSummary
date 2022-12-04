@@ -63,7 +63,7 @@ public class TranscriptConverter extends RunMode {
         modelRunner.setModel(dstModel);
         o.println("Parser and Runtime OK");
         
-        // process tspts
+        // process transcripts
         Path dstDir = transcriptsPath.resolveSibling(transcriptsPath.getFileName() + "-cnv");
         o.println(String.format("Destination dir:\t%s", dstDir.toAbsolutePath()));
         Files.createDirectory(dstDir);

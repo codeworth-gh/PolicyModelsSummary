@@ -67,9 +67,13 @@ public class AnswerSummerizer extends RunMode {
         TranscriptParser psr = new TranscriptParser(mdl);
         for (Path tspt : Files.newDirectoryStream(transcriptDir)) {
             if ( tspt.getFileName().toString().endsWith(".xml") ) {
-                o.print("Reading " + tspt.toAbsolutePath() + "...");
-                smry.add(psr.parse(tspt));
-                o.println("OK");
+                o.print("Reading " + tspt.getFileName() + " ...");
+                try {
+                    smry.add(psr.parse(tspt));
+                    o.println("OK");
+                } catch ( Exception e ) {
+                    o.println("\n  Error: " + e.getMessage());
+                }
             } 
         }
         
@@ -160,8 +164,11 @@ public class AnswerSummerizer extends RunMode {
             int counter=0;
             while ( (record = csvReader.readNext()) != null ) {
                 counter++;
-                final String filename = record[0];
-                final String repoName = record[1];
+                String filename = record[0].toLowerCase();
+                final String repoName = record[4];
+                if ( ! filename.endsWith(".xml") ) {
+                    filename = filename + ".xml";
+                }
                 filenameToHRName.put(filename, repoName);
                 o.println(filename + " -> " + repoName );
             }
